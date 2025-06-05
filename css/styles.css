@@ -1,0 +1,131 @@
+
+/* Estilo para el para el body en general */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #e2fca5;
+  color: #000;
+  text-align: center;
+}
+
+
+/* Estilo para el header */
+header {
+  background-color: #fb8a99;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  height: 80px;
+}
+
+.btn-container {
+  display: flex;
+  gap: 10px;
+}
+
+.btn {
+  color: white;
+  padding: 8px 16px;
+  text-decoration: none;
+}
+
+main {
+  padding: 20px;
+}
+
+/* Estilo seccion 1 */
+
+.seccion1 h1 {
+  font-size: 24px;
+  margin: 40px 0;
+  color: #fb8a99;
+}
+
+/* Estilo seccion 2 */
+.fila-central {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+  padding: 40px 20px;
+  flex-wrap: wrap; /* Por si se achica en móviles */
+}
+
+.logo-central {
+  max-width: 200px;
+  height: auto;
+}
+
+.rol-btn {
+  font-size: 1.2rem;
+  padding: 15px 30px;
+  background-color: #e57373;
+  color: white;
+  text-decoration: none;
+  border-radius: 10px;
+  font-weight: bold;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.rol-btn:hover {
+  background-color: #d9534f;
+  transform: scale(1.05);
+}
+
+
+/* Estilo seccion 3 */
+.seccion3 {
+  margin: 40px 0;
+}
+
+.disponible {
+  font-size: 18px;
+  font-weight: bold;
+  color: #e57373; /* Rosado */
+  margin-bottom: 10px;
+}
+
+.store-icons i {
+  margin: 10px;
+  color: #e57373; /* Rosado */
+  transition: transform 0.3s ease;
+}
+
+.store-icons i:hover {
+  transform: scale(1.2);
+}
+
+/* Estilo para el footer */
+footer {
+  background-color: #fb8a99;
+  padding: 10px 20px;
+  color: white;
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.social-icons a {
+  color: white;
+  margin-left: 10px;
+  font-size: 1.5rem;
+  transition: transform 0.3s ease;
+}
+
+.social-icons a:hover {
+  transform: scale(1.2);
+}
+
+footer p {
+  margin: 0 auto;
+  text-align: center;
+  flex: 1;
+}
