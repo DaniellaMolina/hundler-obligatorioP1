@@ -22,11 +22,32 @@
       <a href="/html/ingresar.html" class="btn">Ingresar</a>
     </div>
   </header>
+<main>
+ <section class="form-container">
+  <h2>Registro de Cliente</h2>
+  <form id="formRegistro">
+    <label for="usuario">Nombre de usuario:</label>
+    <input type="text" id="usuario" />
 
-  <main>
+    <label for="contrasena">Contraseña:</label>
+    <input type="password" id="contrasena" />
 
+    <label for="nombrePerro">Nombre del perro:</label>
+    <input type="text" id="nombrePerro" />
 
-  </main>
+    <label for="tamano">Tamaño del perro:</label>
+    <select id="tamano">
+      <option value="">Seleccionar</option>
+      <option value="chico">Chico</option>
+      <option value="mediano">Mediano</option>
+      <option value="grande">Grande</option>
+    </select>
+
+    <button type="submit">Registrarse</button>
+  </form>
+
+  <p id="mensajeRegistro"></p>
+</main>
 
 <footer>
   <div class="footer-content">
@@ -40,6 +61,10 @@
 </footer>
 
 
-  <script src=""></script>
+  <script src="/js/sistema.js"></script>
+  <script src="/js/ui.js"></script>
+  <script src="/js/libreria.js"></script>
+  <script src="/js/clases.js"></script>
+  
 </body>
 </html>

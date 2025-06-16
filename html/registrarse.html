@@ -24,10 +24,95 @@
     </div>
   </header>
 
-  <main>
+<main>
+
+  <!--Registro Cliente-->
+ <section class="form-container">
+  <h2>Registro de Cliente</h2>
+  <form id="formRegistro">
+    <label for="usuario">Nombre de usuario:</label>
+    <input type="text" id="usuario" />
+
+    <label for="contrasena">Contraseña:</label>
+    <input type="password" id="contrasena" />
+
+    <label for="nombrePerro">Nombre del perro:</label>
+    <input type="text" id="nombrePerro" />
+
+    <label for="tamano">Tamaño del perro:</label>
+    <select id="tamano">
+      <option value="">Seleccionar</option>
+      <option value="chico">Chico</option>
+      <option value="mediano">Mediano</option>
+      <option value="grande">Grande</option>
+    </select>
+
+    <button type="submit">Registrarse</button>
+  </form>
+
+  <p id="mensajeRegistro"></p>
+
+      <!-- Mensaje y link -->
+    <p id="mensajeRegistro"></p>
+    <div class="link-ingreso">
+      <a href="/html/ingresar.html" class="azul">Ya estoy registrado</a>
+    </div>
 
 
-  </main>
+
+  <!-- Registro Paseador -->
+    <section id="formCliente" class="form-container" style="display: none;">
+      <h2>Registro de Cliente</h2>
+      <form id="formRegistro">
+        <label for="usuario">Nombre de usuario:</label>
+        <input type="text" id="usuario" />
+
+        <label for="contrasena">Contraseña:</label>
+        <input type="password" id="contrasena" />
+
+        <label for="nombrePerro">Nombre del perro:</label>
+        <input type="text" id="nombrePerro" />
+
+        <label for="tamano">Tamaño del perro:</label>
+        <select id="tamano">
+          <option value="">Seleccionar</option>
+          <option value="chico">Chico</option>
+          <option value="mediano">Mediano</option>
+          <option value="grande">Grande</option>
+        </select>
+
+        <button type="submit">Registrarse</button>
+      </form>
+      <p id="mensajeRegistro"></p>
+    </section>
+
+    
+    <!--Registro paseador-->
+    <section id="formPaseador" class="form-container" style="display: none;">
+      <h2>Registro de Paseador</h2>
+      <form id="formRegistroPaseador">
+        <label for="usuarioPaseador">Nombre de usuario:</label>
+        <input type="text" id="usuarioPaseador" />
+
+        <label for="contrasenaPaseador">Contraseña:</label>
+        <input type="password" id="contrasenaPaseador" />
+
+        <label for="zona">Zona donde pasea:</label>
+        <input type="text" id="zona" />
+
+        <label for="experiencia">Años de experiencia:</label>
+        <input type="number" id="experiencia" min="0" />
+
+        <button type="submit">Registrarse</button>
+      </form>
+      <p id="mensajeRegistroPaseador"></p>
+
+      <div class="link-ingreso">
+        <a href="/html/ingresar.html" class="azul">Ya estoy registrado</a>
+      </div>
+    </section>
+</main>
+
 
 <footer>
   <div class="footer-content">
@@ -41,6 +126,10 @@
 </footer>
 
 
-  <script src=""></script>
+  <script src="/js/sistema.js"></script>
+  <script src="/js/ui.js"></script>
+  <script src="/js/libreria.js"></script>
+  <script src="/js/clases.js"></script>
+  
 </body>
 </html>
