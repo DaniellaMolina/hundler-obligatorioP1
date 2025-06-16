@@ -1,4 +1,4 @@
-//Validaciones 
+// Validaciones
 let esTextoValido = function (texto) {
   return texto !== null && texto.trim().length > 0;
 };

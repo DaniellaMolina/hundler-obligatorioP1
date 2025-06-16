@@ -13,7 +13,6 @@ Sistema.prototype.registrarCliente = function (nuevoCliente) {
     }
   }
   this.clientes.push(nuevoCliente);
-
   return {
     exito: true,
     mensaje: "Cliente registrado correctamente.",
@@ -30,11 +29,10 @@ Sistema.prototype.registrarPaseador = function (nuevoPaseador) {
     }
   }
   this.paseadores.push(nuevoPaseador);
-
   return {
     exito: true,
     mensaje: "Paseador registrado correctamente.",
   };
 };
 
-let sistema = new Sistema(); 
+let sistema = new Sistema();

@@ -1,7 +1,6 @@
 window.addEventListener("load", inicio);
 
 function inicio() {
-  // Obtener parámetro rol de la URL para mostrar formulario correspondiente
   let params = new URLSearchParams(window.location.search);
   let rol = params.get("rol");
 
@@ -11,20 +10,16 @@ function inicio() {
   if (rol === "cliente") {
     clienteFormSection.style.display = "block";
     paseadorFormSection.style.display = "none";
-
     document.querySelector("#formRegistro").addEventListener("submit", registroClienteUI);
   } else if (rol === "paseador") {
     paseadorFormSection.style.display = "block";
     clienteFormSection.style.display = "none";
-
     document.querySelector("#formRegistroPaseador").addEventListener("submit", registroPaseadorUI);
   } else {
     clienteFormSection.style.display = "none";
     paseadorFormSection.style.display = "none";
   }
 }
-
-let sistema = new Sistema();
 
 function registroClienteUI(event) {
   event.preventDefault();
@@ -43,7 +38,6 @@ function registroClienteUI(event) {
   } else {
     let nuevoCliente = new Cliente(usuario, contrasena, nombrePerro, tamano);
     let resultado = sistema.registrarCliente(nuevoCliente);
-
     mensaje = resultado.mensaje;
   }
 
@@ -67,7 +61,6 @@ function registroPaseadorUI(event) {
   } else {
     let nuevoPaseador = new Paseador(usuario, contrasena, zona, experiencia);
     let resultado = sistema.registrarPaseador(nuevoPaseador);
-
     mensaje = resultado.mensaje;
   }
 
