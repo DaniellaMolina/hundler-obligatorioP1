@@ -207,3 +207,131 @@ form button[type="submit"]:hover {
   text-decoration: underline;
 }
 
+/* cliente.css */
+
+/* Grid de cuidadores */
+.cuidador-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 30px;
+  padding: 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Tarjetas individuales */
+.cuidador-card {
+  background-color: #fb8a99;
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.cuidador-card:hover {
+  transform: translateY(-5px);
+}
+
+/* Imagen del cuidador */
+.cuidador-img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 15px;
+}
+
+/* Estrellas */
+.estrellas {
+  margin-bottom: 15px;
+  font-size: 1.2rem;
+  color: gold;
+}
+
+/* Botón de solicitar */
+.cuidador-card .btn {
+  display: inline-block;
+  background-color: white;
+  color: #fb8a99;
+  padding: 10px 20px;
+  font-weight: bold;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.cuidador-card .btn:hover {
+  background-color: #e57373;
+  color: white;
+}
+
+/* Paseador Seleccionado */
+.paseador-seleccionado {
+  display: none; /* Oculto por defecto */
+  max-width: 500px;
+  margin: 40px auto;
+  padding: 30px;
+  background-color: white;
+  border-radius: 15px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.paseador-seleccionado.visible {
+  display: block;
+}
+
+.paseador-seleccionado h2 {
+  color: #fb8a99;
+  margin-bottom: 20px;
+}
+
+.paseador-img {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 15px;
+}
+
+.paseador-detalle h3 {
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.botones-accion {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.btn-pendiente {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-pendiente:hover {
+  background-color: #388e3c;
+}
+
+.btn-cancelar {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-cancelar:hover {
+  background-color: #d32f2f;
+}

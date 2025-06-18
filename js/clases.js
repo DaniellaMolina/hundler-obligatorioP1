@@ -1,3 +1,4 @@
+//Cliente 
 let Cliente = function (usuario, contrasena, nombrePerro, tamano) {
   this.usuario = usuario;
   this.contrasena = contrasena;
@@ -5,6 +6,7 @@ let Cliente = function (usuario, contrasena, nombrePerro, tamano) {
   this.tamano = tamano;
 };
 
+//Paseador
 let Paseador = function (usuario, contrasena, zona, experiencia) {
   this.usuario = usuario;
   this.contrasena = contrasena;
