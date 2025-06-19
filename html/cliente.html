@@ -3,8 +3,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Hundler</title>
-  <link rel="stylesheet" href="/css/styles.css" />
-  <link rel="stylesheet" href="/css/cliente.css" />
+ <link rel="stylesheet" href="../css/styles.css"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
@@ -14,7 +13,7 @@
       <img src="/img/logoblanco.png" alt="Logo Hundler" class="logo" />
     </a>
     <div class="btn-container">
-      <a href="#" class="btn">Cerrar sesión</a>
+      <a href="#" class="btn" id="btnLogout">Cerrar sesión</a>
     </div>
   </header>
 
@@ -124,7 +123,7 @@
       </div>
     </section>
 
-    <!--Seccion donde se muestra paseador seleccionado-->
+    <!-- Paseador seleccionado -->
     <section id="paseador-seleccionado" class="paseador-seleccionado oculto">
       <h2>Paseador Seleccionado</h2>
       <div class="paseador-detalle">
@@ -135,7 +134,7 @@
           <button id="btn-cancelar" class="btn cancelar">Cancelar</button>
         </div>
       </div>
-  </section>
+    </section>
   </main>
 
   <!-- Pie de página -->
@@ -150,9 +149,9 @@
     </div>
   </footer>
 
-  <script src="/js/sistema.js"></script>
-  <script src="/js/ui.js"></script>
-  <script src="/js/libreria.js"></script>
-  <script src="/js/clases.js"></script>
+  <script src="../js/clases.js"></script>
+  <script src="../js/libreria.js"></script>
+  <script src="../js/sistema.js"></script>
+  <script src="../js/ui.js"></script>
 </body>
 </html>

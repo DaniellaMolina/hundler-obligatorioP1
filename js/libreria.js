@@ -1,8 +1,8 @@
-// Validaciones
-let esTextoValido = function (texto) {
+/* ---------- VALIDACIONES SENCILLAS ---------- */
+function esTextoValido(texto) {
   return texto !== null && texto.trim().length > 0;
-};
+}
 
-let esContrasenaSegura = function (contrasena) {
+function esContrasenaSegura(contrasena) {
   return contrasena.length >= 6;
-};
+}

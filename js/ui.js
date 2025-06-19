@@ -6,18 +6,37 @@ function inicio() {
 
   let clienteFormSection = document.getElementById("formCliente");
   let paseadorFormSection = document.getElementById("formPaseador");
+  let formLogin = document.getElementById("formLogin");
+  let btnLogout = document.getElementById("btnLogout");
 
-  if (rol === "cliente") {
-    clienteFormSection.style.display = "block";
-    paseadorFormSection.style.display = "none";
-    document.querySelector("#formRegistro").addEventListener("submit", registroClienteUI);
-  } else if (rol === "paseador") {
-    paseadorFormSection.style.display = "block";
-    clienteFormSection.style.display = "none";
-    document.querySelector("#formRegistroPaseador").addEventListener("submit", registroPaseadorUI);
-  } else {
-    clienteFormSection.style.display = "none";
-    paseadorFormSection.style.display = "none";
+  // Mostrar formulario según rol
+  if (clienteFormSection && paseadorFormSection) {
+    if (rol === "cliente") {
+      clienteFormSection.style.display = "block";
+      paseadorFormSection.style.display = "none";
+      document.querySelector("#formRegistro").addEventListener("submit", registroClienteUI);
+    } else if (rol === "paseador") {
+      paseadorFormSection.style.display = "block";
+      clienteFormSection.style.display = "none";
+      document.querySelector("#formRegistroPaseador").addEventListener("submit", registroPaseadorUI);
+    } else {
+      clienteFormSection.style.display = "none";
+      paseadorFormSection.style.display = "none";
+    }
+  }
+
+  // Listener para login 
+  if (formLogin) {
+    formLogin.addEventListener("submit", loginUI);
+  }
+
+  // Listener para logout 
+  if (btnLogout) {
+    btnLogout.addEventListener("click", (e) => {
+      e.preventDefault();
+      sistema.logout();
+      window.location.href = "../index.html"; 
+    });
   }
 }
 
@@ -65,4 +84,22 @@ function registroPaseadorUI(event) {
   }
 
   document.querySelector("#mensajeRegistroPaseador").innerText = mensaje;
+}
+
+function loginUI(e) {
+  e.preventDefault();
+
+  let usuario = document.querySelector("#usuarioLogin").value.trim();
+  let contrasena = document.querySelector("#contrasenaLogin").value.trim();
+  let resultado = sistema.login(usuario, contrasena);
+
+  document.querySelector("#mensajeLogin").innerText = resultado.mensaje;
+
+  if (resultado.exito) {
+    if (resultado.rol === "cliente") {
+      window.location.href = "cliente.html";
+    } else if (resultado.rol === "paseador") {
+      window.location.href = "paseador.html";
+    }
+  }
 }
