@@ -1,4 +1,4 @@
-/* ----- MODELO DE DATOS PRINCIPAL ----- */
+// MODELO DE DATOS PRINCIPAL 
 function Sistema() {
   this.clientes = [];
   this.paseadores = [];
@@ -7,14 +7,14 @@ function Sistema() {
   this.cargarDatos();
 }
 
-/* ----- Guardar en localStorage ----- */
+//Guardar en localStorage
 Sistema.prototype.guardarDatos = function () {
   localStorage.setItem("clientes", JSON.stringify(this.clientes));
   localStorage.setItem("paseadores", JSON.stringify(this.paseadores));
   localStorage.setItem("usuarioLogueado", JSON.stringify(this.usuarioLogueado));
 };
 
-/* ----- Cargar desde localStorage ----- */
+//Cargar desde localStorage
 Sistema.prototype.cargarDatos = function () {
   let clientesGuardados = localStorage.getItem("clientes");
   if (clientesGuardados) {
@@ -32,7 +32,7 @@ Sistema.prototype.cargarDatos = function () {
   }
 };
 
-/* ----- Registro Cliente ----- */
+//Registro Cliente 
 Sistema.prototype.registrarCliente = function (nuevoCliente) {
   if (this.clientes.some(c => c.usuario.toLowerCase() === nuevoCliente.usuario.toLowerCase())) {
     return { mensaje: "El usuario ya está registrado." };
@@ -52,7 +52,7 @@ Sistema.prototype.registrarPaseador = function (nuevoPaseador) {
   return { mensaje: "Paseador registrado con éxito." };
 };
 
-/* ----- Login ----- */
+//Login
 Sistema.prototype.login = function (usuario, contrasena) {
   // Buscar cliente
   for (const cliente of this.clientes) {
@@ -81,7 +81,7 @@ Sistema.prototype.login = function (usuario, contrasena) {
   return { exito: false, mensaje: "Usuario o contraseña incorrectos." };
 };
 
-/* ----- Logout ----- */
+//Logout
 Sistema.prototype.logout = function () {
   this.usuarioLogueado = null;
   localStorage.removeItem("usuarioLogueado");

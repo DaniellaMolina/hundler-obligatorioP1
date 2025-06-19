@@ -1,4 +1,4 @@
-/* ---------- VALIDACIONES SENCILLAS ---------- */
+//VALIDACIONES SENCILLAS
 function esTextoValido(texto) {
   return texto !== null && texto.trim().length > 0;
 }

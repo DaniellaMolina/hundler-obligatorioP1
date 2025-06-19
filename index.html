@@ -36,6 +36,84 @@
         <i class="fab fa-google-play fa-2x"></i>
       </div>
     </section>
+
+    <div class="registrarse">
+          <!-- FORMULARIO CLIENTE -->
+    <section id="formCliente" class="form-container" style="display: none;">
+      <h2>Registro Cliente</h2>
+      <form id="formRegistro">
+        <label for="usuario">Usuario:</label>
+        <input type="text" id="usuario" required />
+
+        <label for="contrasena">Contraseña:</label>
+        <input type="password" id="contrasena" required />
+
+        <label for="nombrePerro">Nombre del perro:</label>
+        <input type="text" id="nombrePerro" required />
+
+        <label for="tamano">Tamaño:</label>
+        <select id="tamano" required>
+          <option value="">Seleccioná</option>
+          <option value="pequeño">Pequeño</option>
+          <option value="mediano">Mediano</option>
+          <option value="grande">Grande</option>
+        </select>
+
+        <button type="submit">Registrarse</button>
+      </form>
+      <p id="mensajeRegistro"></p>
+    </section>
+
+    <!-- FORMULARIO PASEADOR -->
+    <section id="formPaseador" class="form-container" style="display: none;">
+      <h2>Registro Paseador</h2>
+      <form id="formRegistroPaseador">
+        <label for="usuarioPaseador">Usuario:</label>
+        <input type="text" id="usuarioPaseador" required />
+
+        <label for="contrasenaPaseador">Contraseña:</label>
+        <input type="password" id="contrasenaPaseador" required />
+
+        <label for="zona">Zona:</label>
+        <input type="text" id="zona" required />
+
+        <label for="experiencia">Años de experiencia:</label>
+        <input type="number" id="experiencia" required min="0" />
+
+        <button type="submit" >Registrarse</button>
+      </form>
+      <p id="mensajeRegistroPaseador"></p>
+    </section>
+
+    <div>
+
+    </div>
+    </div>
+
+    <div class="login">
+    <!-- Formulario Login -->
+    <section class="form-container">
+      <h2>Iniciar Sesión</h2>
+
+      <form id="formLogin">
+        <label for="usuarioLogin">Usuario:</label>
+        <input type="text" id="usuarioLogin" required />
+
+        <label for="contrasenaLogin">Contraseña:</label>
+        <input type="password" id="contrasenaLogin" required />
+
+        <button type="submit">Ingresar</button>
+      </form>
+
+      <p id="mensajeLogin"></p>
+    </section>
+    </div>
+
+    <div>
+      
+    </div>
+
+
   </main>
 
   <footer>

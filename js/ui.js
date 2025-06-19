@@ -40,6 +40,7 @@ function inicio() {
   }
 }
 
+//Registro cliente
 function registroClienteUI(event) {
   event.preventDefault();
 
@@ -50,6 +51,7 @@ function registroClienteUI(event) {
 
   let mensaje = "";
 
+  //Contraseña
   if (!esTextoValido(usuario) || !esTextoValido(nombrePerro) || !esTextoValido(tamano)) {
     mensaje = "Por favor completá todos los campos.";
   } else if (!esContrasenaSegura(contrasena)) {
@@ -63,6 +65,7 @@ function registroClienteUI(event) {
   document.querySelector("#mensajeRegistro").innerText = mensaje;
 }
 
+//Registro paseador
 function registroPaseadorUI(event) {
   event.preventDefault();
 
@@ -83,9 +86,10 @@ function registroPaseadorUI(event) {
     mensaje = resultado.mensaje;
   }
 
-  document.querySelector("#mensajeRegistroPaseador").innerText = mensaje;
+  document.querySelector("#mensajeRegistroPaseador").innerHTML = mensaje;
 }
 
+//Funcion de loguearse y que vaya al html correspondiente
 function loginUI(e) {
   e.preventDefault();
 
@@ -93,7 +97,7 @@ function loginUI(e) {
   let contrasena = document.querySelector("#contrasenaLogin").value.trim();
   let resultado = sistema.login(usuario, contrasena);
 
-  document.querySelector("#mensajeLogin").innerText = resultado.mensaje;
+  document.querySelector("#mensajeLogin").innerHTML = resultado.mensaje;
 
   if (resultado.exito) {
     if (resultado.rol === "cliente") {
