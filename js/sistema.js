@@ -1,90 +1,219 @@
-// MODELO DE DATOS PRINCIPAL 
-function Sistema() {
-  this.clientes = [];
-  this.paseadores = [];
-  this.usuarioLogueado = null;
+/////////////////////////////////////////////////////////
+// SISTEMA - LÓGICA DE NEGOCIO
+/////////////////////////////////////////////////////////
 
-  this.cargarDatos();
+class Sistema {
+  constructor() {
+    this.clientes        = [];
+    this.paseadores      = [];
+    this.contrataciones  = [];
+    this.usuarioLogueado = null;
+
+    this.precargaPaseadores();
+  }
+
+  ///////////////////////////////////////////////////////
+  // CLIENTES
+  ///////////////////////////////////////////////////////
+  /*  Orden de parámetros que usa la UI:
+      (nombrePerro, nombreUsuario, contrasenia, nombreParaMostrar, tamanioPerro)
+      – En este proyecto “nombreParaMostrar” == nombreUsuario  */
+  agregarCliente(pNombrePerro,
+                 pNombreUsuario,
+                 pContrasenia,
+                 pNombre,
+                 pTamanioPerro) {
+
+    let seAgrego = false;
+
+    if (
+      hayDatos(pNombre) &&
+      hayDatos(pNombreUsuario) &&
+      hayDatos(pContrasenia) &&
+      hayDatos(pNombrePerro) &&
+      hayDatos(pTamanioPerro) &&
+      contraseniaValida(pContrasenia) &&
+      this.obtenerClientePorNombreUsuario(pNombreUsuario) === null
+    ) {
+      let nuevo = new Cliente(
+        pNombre,
+        pNombreUsuario,
+        pContrasenia,
+        pNombrePerro,
+        pTamanioPerro
+      );
+      this.clientes.push(nuevo);
+      seAgrego = true;
+    }
+    return seAgrego;
+  }
+
+  obtenerClientePorNombreUsuario(nick) {
+    nick = nick.toLowerCase();
+    return this.clientes.find(c => c.nombreUsuario === nick) || null;
+  }
+
+  loginCliente(nick, pass) {
+    const cli = this.obtenerClientePorNombreUsuario(nick);
+    if (cli && cli.contrasenia === pass) {
+      this.usuarioLogueado = cli;
+      return true;
+    }
+    return false;
+  }
+
+  ///////////////////////////////////////////////////////
+  // PASEADORES
+  ///////////////////////////////////////////////////////
+  precargaPaseadores() {
+    this.paseadores.push(new Paseador("maria lopez",     "1234", 5, "grande"));
+    this.paseadores.push(new Paseador("carlos mendez",   "1234", 8, "grande"));
+    this.paseadores.push(new Paseador("lucia fernandez", "1234", 4, "mediano"));
+    this.paseadores.push(new Paseador("julian perez",    "1234", 3, "chico"));
+  }
+
+  obtenerPaseadorPorNombreUsuario(nick) {
+    nick = nick.toLowerCase();
+    return this.paseadores.find(p => p.nombreUsuario === nick) || null;
+  }
+
+  loginPaseador(nick, pass) {
+    const pas = this.obtenerPaseadorPorNombreUsuario(nick);
+    if (pas && pas.contrasenia === pass) {
+      this.usuarioLogueado = pas;
+      return true;
+    }
+    return false;
+  }
+
+  ///////////////////////////////////////////////////////
+  // CONTRATACIONES
+  ///////////////////////////////////////////////////////
+  tieneContratacionPendienteCliente(cliente) {
+    return this.contrataciones.some(
+      c => c.cliente.id === cliente.id && c.estado === "Pendiente"
+    );
+  }
+
+  obtenerContratacionesCliente(cliente) {
+    return this.contrataciones.filter(c => c.cliente.id === cliente.id);
+  }
+
+  obtenerContratacionesPaseador(paseador) {
+    return this.contrataciones.filter(c => c.paseador.id === paseador.id);
+  }
+
+  contarCuposUsados(paseador) {
+    /* suma de cupos de contrataciones Aprobadas */
+    let total = 0;
+    for (let c of this.contrataciones) {
+      if (c.paseador.id === paseador.id && c.estado === "Aprobada") {
+        total += this.obtenerCuposPorTamanio(c.tamanioPerro);
+      }
+    }
+    return total;
+  }
+
+  obtenerCuposPorTamanio(tam) {
+    if (tam === "grande") return 4;
+    if (tam === "mediano") return 2;
+    return 1;               // chico
+  }
+
+  tieneCupoDisponible(paseador, tamPerro) {
+    if (paseador.tamanioPerro !== tamPerro) return false;
+    return (
+      this.contarCuposUsados(paseador) + this.obtenerCuposPorTamanio(tamPerro)
+    ) <= paseador.cupos;
+  }
+
+  obtenerPaseadoresDisponibles(tamPerro) {
+    return this.paseadores.filter(p => this.tieneCupoDisponible(p, tamPerro));
+  }
+
+  agregarContratacion(cliente, paseador) {
+    if (this.tieneContratacionPendienteCliente(cliente)) return false;
+    this.contrataciones.push(new Contratacion(cliente, paseador));
+    return true;
+  }
+
+  cancelarReservaPendiente(cliente) {
+    let c = this.contrataciones.find(
+      con => con.cliente.id === cliente.id && con.estado === "Pendiente"
+    );
+    if (c) {
+      c.estado = "Cancelada";
+      return true;
+    }
+    return false;
+  }
+
+  aprobarContratacion(idContr) {
+    let c = this.contrataciones.find(ct => ct.id === idContr);
+    if (!c) return false;
+
+    let p = c.paseador;
+    if (!this.tieneCupoDisponible(p, c.tamanioPerro)) {
+      c.estado = "Rechazada";               // sin cupo
+      return false;
+    }
+
+    c.estado = "Aprobada";
+
+    /* Actualizar resto si se queda sin cupo */
+    if (this.contarCuposUsados(p) >= p.cupos) {
+      this.contrataciones.forEach(otro => {
+        if (otro.paseador.id === p.id && otro.estado === "Pendiente") {
+          otro.estado = "Rechazada";
+        }
+      });
+    }
+
+    /* Reglas de incompatibilidad chico-grande */
+    this.contrataciones.forEach(otro => {
+      if (
+        otro.paseador.id === p.id &&
+        otro.estado === "Pendiente" &&
+        ((c.tamanioPerro === "grande" && otro.tamanioPerro === "chico") ||
+         (c.tamanioPerro === "chico"  && otro.tamanioPerro === "grande"))
+      ) {
+        otro.estado = "Rechazada";
+      }
+    });
+
+    return true;
+  }
+
+  ///////////////////////////////////////////////////////
+  // MÉTODOS AUXILIARES QUE USA LA UI
+  ///////////////////////////////////////////////////////
+  cuposDisponiblesParaPaseador(paseador) {
+    return paseador.cupos - this.contarCuposUsados(paseador);
+  }
+
+  obtenerContratacionesPendientesPorPaseador(nick) {
+    nick = nick.toLowerCase();
+    return this.contrataciones.filter(
+      c => c.paseador.nombreUsuario === nick && c.estado === "Pendiente"
+    );
+  }
+
+  obtenerPerrosAsignados(nick) {
+    nick = nick.toLowerCase();
+    return this.contrataciones
+      .filter(
+        c => c.paseador.nombreUsuario === nick && c.estado === "Aprobada"
+      )
+      .map(c => c.cliente); // devuelve los clientes (perros)
+  }
+
+  resumenCupoPaseador(nick) {
+    const p = this.obtenerPaseadorPorNombreUsuario(nick);
+    let ocupados = this.contarCuposUsados(p);
+    return {
+      ocupados,
+      maximo: p.cupos,
+      porcentaje: ((ocupados / p.cupos) * 100).toFixed(0)
+    };
+  }
 }
-
-//Guardar en localStorage
-Sistema.prototype.guardarDatos = function () {
-  localStorage.setItem("clientes", JSON.stringify(this.clientes));
-  localStorage.setItem("paseadores", JSON.stringify(this.paseadores));
-  localStorage.setItem("usuarioLogueado", JSON.stringify(this.usuarioLogueado));
-};
-
-//Cargar desde localStorage
-Sistema.prototype.cargarDatos = function () {
-  let clientesGuardados = localStorage.getItem("clientes");
-  if (clientesGuardados) {
-    this.clientes = JSON.parse(clientesGuardados);
-  }
-
-  let paseadoresGuardados = localStorage.getItem("paseadores");
-  if (paseadoresGuardados) {
-    this.paseadores = JSON.parse(paseadoresGuardados);
-  }
-
-  let usuarioLogueadoGuardado = localStorage.getItem("usuarioLogueado");
-  if (usuarioLogueadoGuardado) {
-    this.usuarioLogueado = JSON.parse(usuarioLogueadoGuardado);
-  }
-};
-
-//Registro Cliente 
-Sistema.prototype.registrarCliente = function (nuevoCliente) {
-  if (this.clientes.some(c => c.usuario.toLowerCase() === nuevoCliente.usuario.toLowerCase())) {
-    return { mensaje: "El usuario ya está registrado." };
-  }
-  this.clientes.push(nuevoCliente);
-  this.guardarDatos();
-  return { mensaje: "Cliente registrado con éxito." };
-};
-
-/* ----- Registro Paseador ----- */
-Sistema.prototype.registrarPaseador = function (nuevoPaseador) {
-  if (this.paseadores.some(p => p.usuario.toLowerCase() === nuevoPaseador.usuario.toLowerCase())) {
-    return { mensaje: "El usuario ya está registrado." };
-  }
-  this.paseadores.push(nuevoPaseador);
-  this.guardarDatos();
-  return { mensaje: "Paseador registrado con éxito." };
-};
-
-//Login
-Sistema.prototype.login = function (usuario, contrasena) {
-  // Buscar cliente
-  for (const cliente of this.clientes) {
-    if (
-      cliente.usuario.toLowerCase() === usuario.toLowerCase() &&
-      cliente.contrasena === contrasena
-    ) {
-      this.usuarioLogueado = cliente;
-      this.guardarDatos();
-      return { exito: true, mensaje: "Inicio de sesión exitoso como cliente.", rol: "cliente" };
-    }
-  }
-
-  // Buscar paseador
-  for (const paseador of this.paseadores) {
-    if (
-      paseador.usuario.toLowerCase() === usuario.toLowerCase() &&
-      paseador.contrasena === contrasena
-    ) {
-      this.usuarioLogueado = paseador;
-      this.guardarDatos();
-      return { exito: true, mensaje: "Inicio de sesión exitoso como paseador.", rol: "paseador" };
-    }
-  }
-
-  return { exito: false, mensaje: "Usuario o contraseña incorrectos." };
-};
-
-//Logout
-Sistema.prototype.logout = function () {
-  this.usuarioLogueado = null;
-  localStorage.removeItem("usuarioLogueado");
-};
-
-const sistema = new Sistema();

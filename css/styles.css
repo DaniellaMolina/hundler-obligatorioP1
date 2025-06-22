@@ -1,58 +1,64 @@
+/* ----------------------------------------------
+   PALETA (referencia rápida)
+   ----------------------------------------------
+   Verde hoja medio      #81c784
+   Verde principal       #66bb6a
+   Verde oscuro hover    #388e3c
+   Verde claro           #d7e8d1
+   Verde muy claro bg    #f1f7ef
+   Dorado (estrellas)    gold
+-------------------------------------------------*/
+/* Ocultar elementos con clase "oculto" */
+.oculto {
+  display: none !important;
+}
 
-/* Estilo para el para el body en general */
+/* ===== Estilo global ===== */
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background-color: #f7e7ce;
-  color: #000;
+  background-color: #f1f7ef;   /* verde muy suave, casi blanco */
+  color: #0e2d13;              /* texto verde oscuro/negro suave */
   text-align: center;
 }
 
-
-/* Estilo para el header */
+/* ===== Header ===== */
 header {
-  background-color: #fb8a99;
+  background-color: #66bb6a; /* verde principal */
   padding: 10px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  height: 70px; /* fijo y más chico */
+  box-sizing: border-box;
 }
 
-.logo {
-  height: 80px;
+#logo {
+  height: 70px; /* más compacto */
+  width: auto;
+  object-fit: contain;
 }
 
-.btn-container {
-  display: flex;
-  gap: 10px;
-}
-
-.btn {
-  color: white;
-  padding: 8px 16px;
-  text-decoration: none;
-}
-
+/* ===== Main ===== */
 main {
   padding: 20px;
 }
 
-/* Estilo seccion 1 */
-
+/* -- sección 1 -- */
 .seccion1 h1 {
   font-size: 24px;
   margin: 40px 0;
-  color: #fb8a99;
+  color: #66bb6a;
 }
 
-/* Estilo seccion 2 */
+/* -- sección 2 -- */
 .fila-central {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 40px;
   padding: 40px 20px;
-  flex-wrap: wrap; /* Por si se achica en móviles */
+  flex-wrap: wrap;
 }
 
 .logo-central {
@@ -63,8 +69,8 @@ main {
 .rol-btn {
   font-size: 1.2rem;
   padding: 15px 30px;
-  background-color: #e57373;
-  color: white;
+  background-color: #81c784;
+  color: #0e2d13;
   text-decoration: none;
   border-radius: 10px;
   font-weight: bold;
@@ -72,12 +78,11 @@ main {
 }
 
 .rol-btn:hover {
-  background-color: #d9534f;
+  background-color: #66bb6a;
   transform: scale(1.05);
 }
 
-
-/* Estilo seccion 3 */
+/* -- sección 3 -- */
 .seccion3 {
   margin: 40px 0;
 }
@@ -85,13 +90,13 @@ main {
 .disponible {
   font-size: 18px;
   font-weight: bold;
-  color: #e57373; /* Rosado */
+  color: #66bb6a;
   margin-bottom: 10px;
 }
 
 .store-icons i {
   margin: 10px;
-  color: #e57373; /* Rosado */
+  color: #66bb6a;
   transition: transform 0.3s ease;
 }
 
@@ -99,9 +104,9 @@ main {
   transform: scale(1.2);
 }
 
-/* Estilo para el footer */
+/* ===== Footer ===== */
 footer {
-  background-color: #fb8a99;
+  background-color: #66bb6a;
   padding: 10px 20px;
   color: white;
 }
@@ -130,30 +135,28 @@ footer p {
   flex: 1;
 }
 
-/* Contenedor del formulario */
+/* ===== Formulario (registro / login) ===== */
 .form-container {
   max-width: 400px;
   margin: 40px auto;
   background-color: white;
   padding: 30px;
   border-radius: 15px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
   text-align: left;
 }
 
-/* Estilo del título */
 .form-container h2 {
   text-align: center;
-  color: #fb8a99;
+  color: #66bb6a;
   margin-bottom: 20px;
 }
 
-/* Estilo de los campos del formulario */
 form label {
   display: block;
   margin-bottom: 5px;
   font-weight: bold;
-  color: #333;
+  color: #0e2d13;
 }
 
 form input,
@@ -162,16 +165,15 @@ form select {
   padding: 10px;
   margin-bottom: 20px;
   border-radius: 8px;
-  border: 1px solid #ccc;
+  border: 1px solid #b8d7b2;
   box-sizing: border-box;
 }
 
-/* Botón del formulario */
 form button[type="submit"] {
   width: 100%;
   padding: 12px;
-  background-color: #e57373;
-  color: white;
+  background-color: #81c784;
+  color: #0e2d13;
   border: none;
   border-radius: 10px;
   font-size: 1rem;
@@ -181,35 +183,16 @@ form button[type="submit"] {
 }
 
 form button[type="submit"]:hover {
-  background-color: #d9534f;
+  background-color: #66bb6a;
 }
 
-/* Mensaje de validación */
 #mensajeRegistro {
   text-align: center;
   margin-top: 15px;
   font-weight: bold;
 }
 
-/* Link a ingreso */
-.link-ingreso {
-  text-align: center;
-  margin-top: 20px;
-}
-
-.link-ingreso a.azul {
-  color: #007bff;
-  text-decoration: none;
-  font-weight: 500;
-}
-
-.link-ingreso a.azul:hover {
-  text-decoration: underline;
-}
-
-/* cliente.css */
-
-/* Grid de cuidadores */
+/* ===== Grid de cuidadores ===== */
 .cuidador-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -219,12 +202,11 @@ form button[type="submit"]:hover {
   margin: 0 auto;
 }
 
-/* Tarjetas individuales */
 .cuidador-card {
-  background-color: #fb8a99;
+  background-color: #81c784;
   border-radius: 15px;
   padding: 20px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
   text-align: center;
   transition: transform 0.3s ease;
 }
@@ -233,7 +215,6 @@ form button[type="submit"]:hover {
   transform: translateY(-5px);
 }
 
-/* Imagen del cuidador */
 .cuidador-img {
   width: 100%;
   height: 180px;
@@ -242,18 +223,16 @@ form button[type="submit"]:hover {
   margin-bottom: 15px;
 }
 
-/* Estrellas */
 .estrellas {
   margin-bottom: 15px;
   font-size: 1.2rem;
   color: gold;
 }
 
-/* Botón de solicitar */
 .cuidador-card .btn {
   display: inline-block;
   background-color: white;
-  color: #fb8a99;
+  color: #66bb6a;
   padding: 10px 20px;
   font-weight: bold;
   text-decoration: none;
@@ -262,19 +241,19 @@ form button[type="submit"]:hover {
 }
 
 .cuidador-card .btn:hover {
-  background-color: #e57373;
+  background-color: #4caf50;
   color: white;
 }
 
-/* Paseador Seleccionado */
+/* ===== Tarjeta de paseador seleccionado ===== */
 .paseador-seleccionado {
-  display: none; /* Oculto por defecto */
+  display: none;
   max-width: 500px;
   margin: 40px auto;
   padding: 30px;
   background-color: white;
   border-radius: 15px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
   text-align: center;
 }
 
@@ -283,7 +262,7 @@ form button[type="submit"]:hover {
 }
 
 .paseador-seleccionado h2 {
-  color: #fb8a99;
+  color: #66bb6a;
   margin-bottom: 20px;
 }
 
@@ -297,7 +276,7 @@ form button[type="submit"]:hover {
 
 .paseador-detalle h3 {
   margin-bottom: 20px;
-  color: #333;
+  color: #0e2d13;
 }
 
 .botones-accion {
@@ -322,7 +301,7 @@ form button[type="submit"]:hover {
 }
 
 .btn-cancelar {
-  background-color: #f44336;
+  background-color: #e53935;
   color: white;
   border: none;
   padding: 10px 20px;
@@ -333,5 +312,23 @@ form button[type="submit"]:hover {
 }
 
 .btn-cancelar:hover {
-  background-color: #d32f2f;
+  background-color: #b71c1c;
+}
+
+/* ===== Accesibilidad: focos ===== */
+input[type="text"]:focus,
+input[type="password"]:focus,
+select:focus,
+form button[type="submit"]:focus,
+nav a:focus,
+.btn:focus {
+  outline: 3px solid #66bb6a;
+  outline-offset: 2px;
+}
+
+/* ===== Media Query móvil ===== */
+@media (max-width: 600px) {
+  .cuidador-grid {
+    padding: 20px;
+  }
 }
