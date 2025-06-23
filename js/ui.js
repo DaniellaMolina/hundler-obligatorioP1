@@ -12,6 +12,10 @@ function inicio() {
   document.querySelector("#btnLoginPaseador")
           .addEventListener("click", loginPaseadorUI);
 
+  /* Volver al login desde registro */
+  document.querySelector("#btnVolverLoginDesdeRegistro")
+          .addEventListener("click", volverLoginDesdeRegistroUI);
+
   /* Registro */
   document.querySelector("#btnRegistrarCliente")
           .addEventListener("click", registrarClienteUI);
@@ -45,7 +49,6 @@ function inicio() {
   ocultarTodo();
   prepararLogin();
 }
-
 /////////////////////////////////////////////////////////
 // VISTAS
 /////////////////////////////////////////////////////////
@@ -54,10 +57,15 @@ function ocultarTodo() {
     "divLogin",
     "divRegistroCliente",
     "divContratarPaseador",
-    "divMiReserva",
-    "divGestionPaseador",
-    "navPrincipal"
+    "divCancelarReserva",
+    "divInfoPaseadores",
+    "divGestionarContrataciones",
+    "divVerPerrosAsignados",
   ].forEach(ocultarElemento);
+
+  // Ocultar nav y todos sus botones
+  ocultarElemento("navPrincipal");
+  ["liContratarPaseadorCliente", "liVerReservaCliente", "liGestionarContratacionesPaseador", "liCerrarSesion"].forEach(ocultarElemento);
 }
 
 function prepararLogin() {
@@ -71,6 +79,7 @@ function prepararLogin() {
 function mostrarVistaContratarPaseador() {
   ocultarTodo();
   mostrarElemento("navPrincipal");
+  mostrarBotonesCliente();
   mostrarElemento("divContratarPaseador");
   cargarPaseadoresDisponiblesUI();
 }
@@ -78,19 +87,21 @@ function mostrarVistaContratarPaseador() {
 function mostrarVistaMiReserva() {
   ocultarTodo();
   mostrarElemento("navPrincipal");
-  mostrarElemento("divMiReserva");
+  mostrarBotonesCliente();
+  mostrarElemento("divCancelarReserva");
   mostrarReservaClienteUI();
 }
 
 function mostrarVistaGestionPaseador() {
   ocultarTodo();
   mostrarElemento("navPrincipal");
-  mostrarElemento("divGestionPaseador");
+  mostrarBotonesPaseador();
+  mostrarElemento("divGestionarContrataciones");
   mostrarSolicitudesPaseadorUI();
 }
 
 /////////////////////////////////////////////////////////
-// REGISTRO  &  LOGIN
+// REGISTRO & LOGIN
 /////////////////////////////////////////////////////////
 function registrarClienteUI() {
   let nombrePerro = obtenerValorDeUnCampo("txtNombrePerro");
@@ -120,6 +131,11 @@ function registrarClienteUI() {
     mensaje = "<ul>" + errores.map(e => `<li>${e}</li>`).join("") + "</ul>";
   }
   mostrarAlgoHTML("pMsgReg", mensaje);
+}
+
+function volverLoginDesdeRegistroUI() {
+  ocultarTodo();
+  prepararLogin();
 }
 
 function loginClienteUI() {
@@ -159,23 +175,152 @@ function cerrarSesionUI() {
 }
 
 /////////////////////////////////////////////////////////
+// MENÚ BOTONES VISIBILIDAD
+/////////////////////////////////////////////////////////
+
+function mostrarBotonesCliente() {
+  mostrarElemento("liContratarPaseadorCliente");
+  mostrarElemento("liVerReservaCliente");
+  mostrarElemento("liCerrarSesion");
+  ocultarElemento("liGestionarContratacionesPaseador");
+}
+
+function mostrarBotonesPaseador() {
+  mostrarElemento("liGestionarContratacionesPaseador");
+  mostrarElemento("liCerrarSesion");
+  ocultarElemento("liContratarPaseadorCliente");
+  ocultarElemento("liVerReservaCliente");
+}
+
+/////////////////////////////////////////////////////////
+// REGISTRO & LOGIN
+/////////////////////////////////////////////////////////
+function registrarClienteUI() {
+  let nombrePerro = obtenerValorDeUnCampo("txtNombrePerro");
+  let usuario     = obtenerValorDeUnCampo("txtUsuReg");
+  let pass        = obtenerValorDeUnCampo("txtPassReg");
+  let tamanio     = obtenerValorDeUnCampo("slcTam");
+
+  let errores = [];
+
+  if (!hayDatos(nombrePerro))   errores.push("Debe ingresar el nombre del perro.");
+  if (!hayDatos(usuario))       errores.push("Debe ingresar un nombre de usuario.");
+  if (!hayDatos(pass))          errores.push("Debe ingresar una contraseña.");
+  if (!hayDatos(tamanio))       errores.push("Debe seleccionar el tamaño del perro.");
+  if (!contraseniaValida(pass)) errores.push("La contraseña debe tener al menos 5 caracteres, incluyendo mayúscula, minúscula y número.");
+  if (sistema.obtenerClientePorNombreUsuario(usuario) !== null) errores.push("El usuario ya existe.");
+
+  let mensaje = "";
+
+  if (errores.length === 0) {
+    let ok = sistema.agregarCliente(nombrePerro, usuario, pass, usuario, tamanio);
+    mensaje = ok ? "¡Registro exitoso!" : "Error al registrar cliente.";
+    if (ok) {
+      ["txtNombrePerro", "txtUsuReg", "txtPassReg"].forEach(limpiarCampo);
+      document.querySelector("#slcTam").value = "";
+    }
+  } else {
+    mensaje = "<ul>" + errores.map(e => `<li>${e}</li>`).join("") + "</ul>";
+  }
+  mostrarAlgoHTML("pMsgReg", mensaje);
+}
+
+function volverLoginDesdeRegistroUI() {
+  ocultarTodo();
+  prepararLogin();
+}
+
+function loginClienteUI() {
+  let usuario = obtenerValorDeUnCampo("txtUsuLogin");
+  let pass    = obtenerValorDeUnCampo("txtPassLogin");
+
+  let ok = hayDatos(usuario) && hayDatos(pass) && sistema.loginCliente(usuario, pass);
+
+  if (ok) {
+    mostrarBotonesCliente();
+    mostrarVistaContratarPaseador();
+    mostrarAlgoHTML("pMsgLogin", "");
+  } else {
+    mostrarAlgoHTML("pMsgLogin", "Usuario y/o contraseña inválida.");
+  }
+}
+
+function loginPaseadorUI() {
+  let usuario = obtenerValorDeUnCampo("txtUsuLogin");
+  let pass    = obtenerValorDeUnCampo("txtPassLogin");
+
+  let ok = hayDatos(usuario) && hayDatos(pass) && sistema.loginPaseador(usuario, pass);
+
+  if (ok) {
+    mostrarBotonesPaseador();
+    mostrarVistaGestionPaseador();
+    mostrarAlgoHTML("pMsgLogin", "");
+  } else {
+    mostrarAlgoHTML("pMsgLogin", "Usuario y/o contraseña inválida.");
+  }
+}
+
+function cerrarSesionUI() {
+  sistema.usuarioLogueado = null;
+  ocultarTodo();
+  prepararLogin();
+}
+
+
+/////////////////////////////////////////////////////////
+// FUNCIONES AUXILIARES
+/////////////////////////////////////////////////////////
+
+function ocultarElemento(id) {
+  const el = document.getElementById(id);
+  if (el) el.classList.add("oculto");
+}
+
+function mostrarElemento(id) {
+  const el = document.getElementById(id);
+  if (el) el.classList.remove("oculto");
+}
+
+function mostrarAlgoHTML(id, html) {
+  const el = document.getElementById(id);
+  if (el) el.innerHTML = html;
+}
+
+function obtenerValorDeUnCampo(id) {
+  const el = document.getElementById(id);
+  return el ? el.value.trim() : "";
+}
+
+function hayDatos(valor) {
+  return valor !== null && valor !== undefined && valor.length > 0;
+}
+
+function limpiarCampo(id) {
+  const el = document.getElementById(id);
+  if (el) el.value = "";
+}
+
+function contraseniaValida(pass) {
+  // al menos 5 caracteres, una mayúscula, una minúscula y un número
+  return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{5,}$/.test(pass);
+}
+
+/////////////////////////////////////////////////////////
 // CLIENTE
 /////////////////////////////////////////////////////////
-function mostrarBotonesCliente() {
-  mostrarElemento("navPrincipal");
-  ["aContratarPaseadorCliente", "aVerReservaCliente", "aCerrarSesion"].forEach(mostrarElemento);
-  ocultarElemento("aGestionarContratacionesPaseador");
-}
 
 function cargarPaseadoresDisponiblesUI() {
   let cliente = sistema.usuarioLogueado;
   if (!cliente) return;
 
-  let cont = document.getElementById("divSelectPaseador");
-  cont.innerHTML = "";
+  let cont = document.getElementById("divContratarPaseador");
+  if (!cont) return;
+
+  let select = document.getElementById("slcPaseadores");
+  select.innerHTML = "";
 
   if (sistema.tieneContratacionPendienteCliente(cliente)) {
-    cont.innerHTML = "<p>Ya tiene una contratación pendiente. Cancele antes de contratar otra.</p>";
+    cont.querySelector("#pMsgContratar").textContent = "Ya tiene una contratación pendiente. Cancele antes de contratar otra.";
     ocultarElemento("btnContratar");
     return;
   }
@@ -183,28 +328,24 @@ function cargarPaseadoresDisponiblesUI() {
   let lista = sistema.obtenerPaseadoresDisponibles(cliente.tamanioPerro);
 
   if (lista.length === 0) {
-    cont.innerHTML = "<p>No hay paseadores disponibles para el tamaño de su perro.</p>";
+    cont.querySelector("#pMsgContratar").textContent = "No hay paseadores disponibles para el tamaño de su perro.";
     ocultarElemento("btnContratar");
     return;
   }
 
-  /* SELECT */
+  cont.querySelector("#pMsgContratar").textContent = "";
   mostrarElemento("btnContratar");
-  let sel = document.createElement("select");
-  sel.id  = "selectPaseadores";
 
-  sel.innerHTML = `<option value="">Seleccione un paseador…</option>` +
+  let opciones = `<option value="">Seleccione un paseador…</option>` +
     lista.map(p =>
-      `<option value="${p.nombreUsuario}">
-        ${p.nombreUsuario} (Cupos disp.: ${sistema.cuposDisponiblesParaPaseador(p)})
-       </option>`
+      `<option value="${p.nombreUsuario}">${p.nombreUsuario} (Cupos disp.: ${sistema.cuposDisponiblesParaPaseador(p)})</option>`
     ).join("");
 
-  cont.appendChild(sel);
+  select.innerHTML = opciones;
 }
 
 function contratarPaseadorUI() {
-  let select = document.getElementById("selectPaseadores");
+  let select = document.getElementById("slcPaseadores");
   if (!select || select.value === "") {
     alert("Debe seleccionar un paseador.");
     return;
@@ -223,12 +364,13 @@ function contratarPaseadorUI() {
 
 function mostrarReservaClienteUI() {
   let lista = sistema.obtenerContratacionesCliente(sistema.usuarioLogueado);
-  let div   = document.getElementById("divTablaReserva");
+  let div   = document.getElementById("divCancelarReserva");
+  if (!div) return;
 
   if (lista.length === 0) {
-    div.innerHTML = "<p>No posee contrataciones.</p>";
+    div.querySelector("#pInfoReserva").textContent = "No posee contrataciones.";
   } else {
-    div.innerHTML =
+    div.querySelector("#pInfoReserva").innerHTML =
       `<table>
         <thead><tr><th>Paseador</th><th>Estado</th></tr></thead>
         <tbody>
@@ -243,18 +385,15 @@ function mostrarReservaClienteUI() {
 /////////////////////////////////////////////////////////
 // PASEADOR
 /////////////////////////////////////////////////////////
-function mostrarBotonesPaseador() {
-  mostrarElemento("navPrincipal");
-  ["aGestionarContratacionesPaseador", "aCerrarSesion"].forEach(mostrarElemento);
-  ["aContratarPaseadorCliente", "aVerReservaCliente"].forEach(ocultarElemento);
-}
 
 function mostrarSolicitudesPaseadorUI() {
   const pas = sistema.usuarioLogueado;
   if (!pas) return;
 
   let lista = sistema.obtenerContratacionesPendientesPorPaseador(pas.nombreUsuario);
-  let div   = document.getElementById("divTablaPend");
+  let div   = document.getElementById("divGestionarContrataciones");
+  if (!div) return;
+
   div.innerHTML = "";
 
   if (lista.length === 0) {
@@ -294,24 +433,27 @@ function mostrarPerrosAsignadosUI() {
   if (!pas) return;
 
   let perros = sistema.obtenerPerrosAsignados(pas.nombreUsuario);
-  let div    = document.getElementById("divTablaAsignados");
-  div.innerHTML = "";
+  let div    = document.getElementById("divVerPerrosAsignados");
+  if (!div) return;
+
+  let ul = div.querySelector("#listaPerrosAsignados");
+  if (!ul) return;
+
+  ul.innerHTML = "";
 
   if (perros.length === 0) {
-    div.textContent = "No hay perros asignados.";
+    ul.textContent = "No hay perros asignados.";
   } else {
-    div.innerHTML =
-      `<table>
-        <thead><tr><th>Nombre</th><th>Tamaño</th></tr></thead>
-        <tbody>
-          ${perros.map(p =>
-            `<tr><td>${p.nombrePerro}</td><td>${p.tamanioPerro}</td></tr>`
-          ).join("")}
-        </tbody>
-      </table>`;
+    ul.innerHTML =
+      perros.map(p =>
+        `<li>${p.nombrePerro} (${p.tamanioPerro})</li>`
+      ).join("");
   }
 
   let res = sistema.resumenCupoPaseador(pas.nombreUsuario);
-  document.getElementById("pResumenCupo").textContent =
-    `Cupos ocupados: ${res.ocupados} / ${res.maximo} (${res.porcentaje}%)`;
+  let pResumen = document.getElementById("pResumenCupos");
+  if (pResumen) {
+    pResumen.textContent =
+      `Cupos ocupados: ${res.ocupados} / ${res.maximo} (${res.porcentaje}%)`;
+  }
 }

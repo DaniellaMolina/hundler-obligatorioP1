@@ -16,10 +16,18 @@
       <img id="logo" src="img/logoblanco.png" alt="Hundler - logo" />
       <nav role="navigation">
         <ul id="navPrincipal">
-          <li><a id="aContratarPaseadorCliente" class="oculto">Contratar paseador</a></li>
-          <li><a id="aVerReservaCliente" class="oculto">Mi reserva</a></li>
-          <li><a id="aGestionarContratacionesPaseador" class="oculto">Gestionar solicitudes</a></li>
-          <li><a id="aCerrarSesion" class="oculto">Cerrar sesión</a></li>
+          <li id="liContratarPaseadorCliente" class="oculto">
+            <button id="aContratarPaseadorCliente">Contratar paseador</button>
+          </li>
+          <li id="liVerReservaCliente" class="oculto">
+            <button id="aVerReservaCliente">Mi reserva</button>
+          </li>
+          <li id="liGestionarContratacionesPaseador" class="oculto">
+            <button id="aGestionarContratacionesPaseador">Gestionar solicitudes</button>
+          </li>
+          <li id="liCerrarSesion" class="oculto">
+            <button id="aCerrarSesion">Cerrar sesión</button>
+          </li>
         </ul>
       </nav>
     </header>
@@ -70,7 +78,7 @@
 
           <button id="btnRegistrarCliente" type="button">Registrarme</button>
           <p id="pMsgReg"></p>
-        </form>
+          <button id="btnVolverLoginDesdeRegistro">Iniciar sesión</button>        </form>
       </div>
 
       <!-- VISTA CLIENTE: Contratar paseador -->

@@ -1,5 +1,5 @@
 /* ----------------------------------------------
-   🖌️ PALETA DE COLORES
+    PALETA DE COLORES 
 ------------------------------------------------- */
 :root {
   --verde-hoja: #81c784;
@@ -12,7 +12,7 @@
 }
 
 /* ----------------------------------------------
-   🔄 RESET Y BASE
+    RESET Y BASE
 ------------------------------------------------- */
 body {
   margin: 0;
@@ -26,7 +26,7 @@ body {
 }
 
 /* ----------------------------------------------
-   📌 HEADER Y NAVEGACIÓN
+    HEADER Y NAVEGACIÓN
 ------------------------------------------------- */
 header {
   background-color: var(--verde-principal);
@@ -51,6 +51,30 @@ nav ul {
   padding: 0;
 }
 
+/* Estilo para los botones dentro del menú de navegación */
+nav ul#navPrincipal li button {
+  background: none;
+  border: none;
+  color: var(--texto-oscuro);
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  transition: background-color 0.3s ease;
+  border-radius: 6px;
+}
+
+/* Hover y focus para botones menú */
+nav ul#navPrincipal li button:hover,
+nav ul#navPrincipal li button:focus {
+  background-color: var(--dorado);
+  outline: none;
+}
+
+nav ul#navPrincipal li {
+  margin: 0;
+  padding: 0;
+}
+
 nav a {
   color: white;
   text-decoration: none;
@@ -65,7 +89,7 @@ nav a:focus {
 }
 
 /* ----------------------------------------------
-   📋 FORMULARIOS (LOGIN, REGISTRO)
+    FORMULARIOS (LOGIN, REGISTRO)
 ------------------------------------------------- */
 .form-container {
   max-width: 400px;
@@ -127,7 +151,7 @@ form button:hover {
 }
 
 /* ----------------------------------------------
-   📦 SECCIONES GENERALES (contenedores dinámicos)
+    SECCIONES GENERALES (contenedores dinámicos)
 ------------------------------------------------- */
 main > div:not(.form-container) {
   max-width: 800px;
@@ -139,7 +163,7 @@ main > div:not(.form-container) {
 }
 
 /* ----------------------------------------------
-   📊 TABLAS (vista info paseadores)
+    TABLAS (vista info paseadores)
 ------------------------------------------------- */
 table {
   width: 100%;
@@ -159,7 +183,7 @@ th {
 }
 
 /* ----------------------------------------------
-   📃 LISTAS (solicitudes, perros asignados)
+    LISTAS (solicitudes, perros asignados)
 ------------------------------------------------- */
 ul {
   list-style-type: none;
@@ -174,7 +198,7 @@ ul li {
 }
 
 /* ----------------------------------------------
-   📎 FOOTER
+    FOOTER
 ------------------------------------------------- */
 footer {
   background-color: var(--verde-principal);
@@ -195,7 +219,7 @@ footer {
 }
 
 /* ----------------------------------------------
-   📱 RESPONSIVE
+    RESPONSIVE
 ------------------------------------------------- */
 @media (max-width: 600px) {
   header {

@@ -6,13 +6,11 @@
 // Obtener valores desde inputs
 /////////////////////////////////////////////////////////
 
-// Devuelve el valor de un campo de texto/input por su ID
 function obtenerValorDeUnCampo(pIdDelCampo) {
   let elemento = document.querySelector("#" + pIdDelCampo);
-  return elemento ? elemento.value : "";
+  return elemento ? elemento.value.trim() : "";
 }
 
-// Devuelve el valor numérico (conversión automática) de un input
 function obtenerValorDeUnCampoNumerico(pIdDelCampo) {
   let elemento = document.querySelector("#" + pIdDelCampo);
   return elemento ? Number(elemento.value) : NaN;
@@ -22,36 +20,25 @@ function obtenerValorDeUnCampoNumerico(pIdDelCampo) {
 // Validaciones
 /////////////////////////////////////////////////////////
 
-// Verifica si un número es válido y positivo
 function esNumeroYPositivo(pNumero) {
   return typeof pNumero === "number" && !isNaN(pNumero) && pNumero > 0;
 }
 
-// Verifica si un string contiene algún dato (no vacío)
 function hayDatos(pString) {
   return typeof pString === "string" && pString.trim() !== "";
 }
 
-// Verifica si una contraseña tiene al menos 5 caracteres,
-// una mayúscula, una minúscula y un número
 function contraseniaValida(pContrasenia) {
   if (typeof pContrasenia !== "string" || pContrasenia.length < 5) {
     return false;
   }
-
-  // Usamos regex para mayor precisión
-  let tieneMayuscula = /[A-Z]/.test(pContrasenia);
-  let tieneMinuscula = /[a-z]/.test(pContrasenia);
-  let tieneNumero = /\d/.test(pContrasenia);
-
-  return tieneMayuscula && tieneMinuscula && tieneNumero;
+  return /[A-Z]/.test(pContrasenia) && /[a-z]/.test(pContrasenia) && /\d/.test(pContrasenia);
 }
 
 /////////////////////////////////////////////////////////
 // Manipulación de elementos en pantalla
 /////////////////////////////////////////////////////////
 
-// Oculta un elemento (agrega la clase CSS "oculto")
 function ocultarElemento(idElemento) {
   let elemento = document.querySelector(`#${idElemento}`);
   if (elemento) {
@@ -61,7 +48,6 @@ function ocultarElemento(idElemento) {
   }
 }
 
-// Muestra un elemento (remueve la clase CSS "oculto")
 function mostrarElemento(idElemento) {
   let elemento = document.querySelector(`#${idElemento}`);
   if (elemento) {
@@ -71,7 +57,6 @@ function mostrarElemento(idElemento) {
   }
 }
 
-// Limpia el contenido de un campo de texto/input
 function limpiarCampo(idDelCampo) {
   let elemento = document.querySelector(`#${idDelCampo}`);
   if (elemento) {
@@ -81,7 +66,6 @@ function limpiarCampo(idDelCampo) {
   }
 }
 
-// Inserta contenido HTML en un elemento por ID
 function mostrarAlgoHTML(idDelElemento, contenido) {
   let elemento = document.querySelector(`#${idDelElemento}`);
   if (elemento) {

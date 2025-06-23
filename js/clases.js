@@ -86,13 +86,13 @@ class Contratacion {
     this.cliente = pCliente;
     this.paseador = pPaseador;
     this.tamanioPerro = pCliente.tamanioPerro;
-    this.estado = "pendiente"; // pendiente, aprobada, rechazada, cancelada
+    this.estado = "Pendiente"; // 🔄 Estado inicial capitalizado
   }
 
   cambiarEstado(nuevoEstado) {
-    const estadosValidos = ["pendiente", "aprobada", "rechazada", "cancelada"];
-    if (estadosValidos.includes(nuevoEstado.toLowerCase())) {
-      this.estado = nuevoEstado.toLowerCase();
+    const estadosValidos = ["Pendiente", "Aprobada", "Rechazada", "Cancelada"];
+    if (estadosValidos.includes(nuevoEstado)) {
+      this.estado = nuevoEstado;
       return true;
     }
     return false;
