@@ -17,24 +17,10 @@ class Sistema {
   // CLIENTES
   ///////////////////////////////////////////////////////
 
-  /**
-   * Agrega un nuevo cliente al sistema.
-   * @param {string} pNombrePerro - Nombre del perro del cliente.
-   * @param {string} pNombreUsuario - Nombre de usuario (nick) del cliente.
-   * @param {string} pContrasenia - Contraseña del cliente.
-   * @param {string} pNombre - Nombre para mostrar del cliente (igual al usuario).
-   * @param {string} pTamanioPerro - Tamaño del perro (chico, mediano, grande).
-   * @returns {boolean} true si se agregó correctamente, false si hubo error o datos inválidos.
-   */
-  agregarCliente(pNombrePerro,
-                 pNombreUsuario,
-                 pContrasenia,
-                 pNombre,
-                 pTamanioPerro) {
-
+  agregarCliente(pNombrePerro, pNombreUsuario, pContrasenia, pNombre, pTamanioPerro) {
     let seAgrego = false;
 
-    // Validaciones básicas: que haya datos, contraseña válida y usuario no repetido
+    // Validaciones básicas: que haya datos, contraseña válida y usuario no repetido (case insensitive)
     if (
       hayDatos(pNombre) &&
       hayDatos(pNombreUsuario) &&
@@ -44,7 +30,7 @@ class Sistema {
       contraseniaValida(pContrasenia) &&
       this.obtenerClientePorNombreUsuario(pNombreUsuario) === null
     ) {
-      // Crear instancia de Cliente y agregar a la lista
+      // Crear instancia de Cliente y agregar a la lista (normaliza nombreUsuario a lowercase en Cliente)
       let nuevo = new Cliente(
         pNombre,
         pNombreUsuario,
@@ -58,24 +44,14 @@ class Sistema {
     return seAgrego;
   }
 
-  /**
-   * Busca un cliente por su nombre de usuario (nick).
-   * @param {string} nick - Nombre de usuario a buscar.
-   * @returns {Cliente|null} El cliente encontrado o null si no existe.
-   */
   obtenerClientePorNombreUsuario(nick) {
+    if (!nick) return null;
     nick = nick.toLowerCase();
     return this.clientes.find(c => c.nombreUsuario === nick) || null;
   }
 
-  /**
-   * Intenta loguear un cliente con usuario y contraseña.
-   * Si es válido, setea usuarioLogueado y devuelve true.
-   * @param {string} nick - Nombre de usuario.
-   * @param {string} pass - Contraseña.
-   * @returns {boolean} true si login exitoso, false si no.
-   */
   loginCliente(nick, pass) {
+    if (!nick || !pass) return false;
     const cli = this.obtenerClientePorNombreUsuario(nick);
     if (cli && cli.contrasenia === pass) {
       this.usuarioLogueado = cli;
@@ -88,34 +64,22 @@ class Sistema {
   // PASEADORES
   ///////////////////////////////////////////////////////
 
-  /**
-   * Precarga algunos paseadores con datos iniciales.
-   */
   precargaPaseadores() {
-    this.paseadores.push(new Paseador("maria lopez",     "1234", 5, "grande"));
-    this.paseadores.push(new Paseador("carlos mendez",   "1234", 8, "grande"));
-    this.paseadores.push(new Paseador("lucia fernandez", "1234", 4, "mediano"));
-    this.paseadores.push(new Paseador("julian perez",    "1234", 3, "chico"));
+    // Ajusté para agregar parámetros completos a constructor Paseador 
+    this.paseadores.push(new Paseador("maria", "1234", 16, "grande", "", "Maria Lopez", "Experta paseadora", 5));
+    this.paseadores.push(new Paseador("carlos", "1234", 16, "grande", "", "Carlos Mendez", "Amante de los perros grandes", 4));
+    this.paseadores.push(new Paseador("lucia", "1234", 8, "mediano", "", "Lucia Fernandez", "Especialista en perros medianos", 4));
+    this.paseadores.push(new Paseador("julian", "1234", 4, "chico", "", "Julian Perez", "Cuida perros chicos con cariño", 3));
   }
 
-  /**
-   * Busca un paseador por su nombre de usuario.
-   * @param {string} nick - Nombre de usuario a buscar.
-   * @returns {Paseador|null} Paseador encontrado o null.
-   */
   obtenerPaseadorPorNombreUsuario(nick) {
+    if (!nick) return null;
     nick = nick.toLowerCase();
     return this.paseadores.find(p => p.nombreUsuario === nick) || null;
   }
 
-  /**
-   * Intenta loguear un paseador con usuario y contraseña.
-   * Si es válido, setea usuarioLogueado y devuelve true.
-   * @param {string} nick - Nombre de usuario.
-   * @param {string} pass - Contraseña.
-   * @returns {boolean} true si login exitoso, false si no.
-   */
   loginPaseador(nick, pass) {
+    if (!nick || !pass) return false;
     const pas = this.obtenerPaseadorPorNombreUsuario(nick);
     if (pas && pas.contrasenia === pass) {
       this.usuarioLogueado = pas;
@@ -128,42 +92,25 @@ class Sistema {
   // CONTRATACIONES
   ///////////////////////////////////////////////////////
 
-  /**
-   * Verifica si un cliente tiene alguna contratación pendiente.
-   * @param {Cliente} cliente - Cliente a verificar.
-   * @returns {boolean} true si tiene alguna contratación pendiente.
-   */
   tieneContratacionPendienteCliente(cliente) {
+    if (!cliente) return false;
     return this.contrataciones.some(
       c => c.cliente.id === cliente.id && c.estado === "Pendiente"
     );
   }
 
-  /**
-   * Obtiene todas las contrataciones de un cliente.
-   * @param {Cliente} cliente - Cliente a buscar.
-   * @returns {Array} Lista de contrataciones del cliente.
-   */
   obtenerContratacionesCliente(cliente) {
+    if (!cliente) return [];
     return this.contrataciones.filter(c => c.cliente.id === cliente.id);
   }
 
-  /**
-   * Obtiene todas las contrataciones de un paseador.
-   * @param {Paseador} paseador - Paseador a buscar.
-   * @returns {Array} Lista de contrataciones del paseador.
-   */
   obtenerContratacionesPaseador(paseador) {
+    if (!paseador) return [];
     return this.contrataciones.filter(c => c.paseador.id === paseador.id);
   }
 
-  /**
-   * Cuenta la cantidad total de cupos usados por un paseador,
-   * sumando las contrataciones aprobadas según el tamaño de los perros.
-   * @param {Paseador} paseador
-   * @returns {number} Total de cupos usados.
-   */
   contarCuposUsados(paseador) {
+    if (!paseador) return 0;
     let total = 0;
     for (let c of this.contrataciones) {
       if (c.paseador.id === paseador.id && c.estado === "Aprobada") {
@@ -173,57 +120,38 @@ class Sistema {
     return total;
   }
 
-  /**
-   * Devuelve la cantidad de cupos que ocupa un perro según su tamaño.
-   * @param {string} tam - Tamaño del perro (chico, mediano, grande).
-   * @returns {number} Cupos ocupados.
-   */
   obtenerCuposPorTamanio(tam) {
     if (tam === "grande") return 4;
     if (tam === "mediano") return 2;
-    return 1;  // chico
+    return 1;  // chico o por defecto
   }
 
-  /**
-   * Verifica si un paseador tiene cupo disponible para un perro de cierto tamaño.
-   * @param {Paseador} paseador
-   * @param {string} tamPerro
-   * @returns {boolean} true si hay cupo disponible.
-   */
   tieneCupoDisponible(paseador, tamPerro) {
+    if (!paseador || !tamPerro) return false;
+
+    // Para seguridad, paseador solo puede tener perros del mismo tamaño o vacíos
     if (paseador.tamanioPerro !== tamPerro) return false;
-    return (
-      this.contarCuposUsados(paseador) + this.obtenerCuposPorTamanio(tamPerro)
-    ) <= paseador.cupos;
+
+    let cuposUsados = this.contarCuposUsados(paseador);
+    let cuposNecesarios = this.obtenerCuposPorTamanio(tamPerro);
+
+    return (cuposUsados + cuposNecesarios) <= paseador.cupos;
   }
 
-  /**
-   * Devuelve lista de paseadores que tienen cupo disponible para un perro de cierto tamaño.
-   * @param {string} tamPerro
-   * @returns {Array} Lista de paseadores disponibles.
-   */
   obtenerPaseadoresDisponibles(tamPerro) {
+    if (!tamPerro) return [];
     return this.paseadores.filter(p => this.tieneCupoDisponible(p, tamPerro));
   }
 
-  /**
-   * Agrega una nueva contratación entre cliente y paseador si no tiene pendiente.
-   * @param {Cliente} cliente
-   * @param {Paseador} paseador
-   * @returns {boolean} true si se agregó con éxito.
-   */
   agregarContratacion(cliente, paseador) {
+    if (!cliente || !paseador) return false;
     if (this.tieneContratacionPendienteCliente(cliente)) return false;
     this.contrataciones.push(new Contratacion(cliente, paseador));
     return true;
   }
 
-  /**
-   * Cancela la reserva pendiente de un cliente.
-   * @param {Cliente} cliente
-   * @returns {boolean} true si se canceló con éxito.
-   */
   cancelarReservaPendiente(cliente) {
+    if (!cliente) return false;
     let c = this.contrataciones.find(
       con => con.cliente.id === cliente.id && con.estado === "Pendiente"
     );
@@ -234,13 +162,6 @@ class Sistema {
     return false;
   }
 
-  /**
-   * Aprueba una contratación según su id.
-   * Cambia estados a Aprobada, Rechazada si no hay cupo,
-   * y aplica reglas de incompatibilidad.
-   * @param {number} idContr
-   * @returns {boolean} true si se aprobó con éxito.
-   */
   aprobarContratacion(idContr) {
     let c = this.contrataciones.find(ct => ct.id === idContr);
     if (!c) return false;
@@ -253,7 +174,7 @@ class Sistema {
 
     c.estado = "Aprobada";
 
-    // Si se quedó sin cupo, rechaza pendientes restantes del paseador
+    // Rechaza todas las pendientes que no caben porque ya se quedó sin cupo
     if (this.contarCuposUsados(p) >= p.cupos) {
       this.contrataciones.forEach(otro => {
         if (otro.paseador.id === p.id && otro.estado === "Pendiente") {
@@ -262,7 +183,7 @@ class Sistema {
       });
     }
 
-    // Regla de incompatibilidad: no mezclar perros chicos con grandes
+    // Rechaza las incompatibles (mezcla de perros chicos y grandes)
     this.contrataciones.forEach(otro => {
       if (
         otro.paseador.id === p.id &&
@@ -281,48 +202,32 @@ class Sistema {
   // MÉTODOS AUXILIARES QUE USA LA UI
   ///////////////////////////////////////////////////////
 
-  /**
-   * Devuelve cupos disponibles para un paseador.
-   * @param {Paseador} paseador
-   * @returns {number} Cupos restantes disponibles.
-   */
   cuposDisponiblesParaPaseador(paseador) {
+    if (!paseador) return 0;
     return paseador.cupos - this.contarCuposUsados(paseador);
   }
 
-  /**
-   * Obtiene contrataciones pendientes de un paseador por su nombre de usuario.
-   * @param {string} nick - Nombre de usuario del paseador.
-   * @returns {Array} Lista de contrataciones pendientes.
-   */
   obtenerContratacionesPendientesPorPaseador(nick) {
+    if (!nick) return [];
     nick = nick.toLowerCase();
     return this.contrataciones.filter(
       c => c.paseador.nombreUsuario === nick && c.estado === "Pendiente"
     );
   }
 
-  /**
-   * Obtiene los perros asignados (clientes con contratacion aprobada) a un paseador.
-   * @param {string} nick - Nombre de usuario del paseador.
-   * @returns {Array} Lista de clientes/perros asignados.
-   */
   obtenerPerrosAsignados(nick) {
+    if (!nick) return [];
     nick = nick.toLowerCase();
     return this.contrataciones
-      .filter(
-        c => c.paseador.nombreUsuario === nick && c.estado === "Aprobada"
-      )
+      .filter(c => c.paseador.nombreUsuario === nick && c.estado === "Aprobada")
       .map(c => c.cliente);
   }
 
-  /**
-   * Resumen del cupo usado y disponible de un paseador.
-   * @param {string} nick - Nombre de usuario del paseador.
-   * @returns {object} { ocupados, maximo, porcentaje }
-   */
   resumenCupoPaseador(nick) {
+    if (!nick) return { ocupados: 0, maximo: 0, porcentaje: "0" };
     const p = this.obtenerPaseadorPorNombreUsuario(nick);
+    if (!p) return { ocupados: 0, maximo: 0, porcentaje: "0" };
+
     let ocupados = this.contarCuposUsados(p);
     return {
       ocupados,

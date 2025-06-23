@@ -1,5 +1,5 @@
 /* ----------------------------------------------
-   PALETA DE COLORES PARA USAR EN LA PAGE
+   🖌️ PALETA DE COLORES
 ------------------------------------------------- */
 :root {
   --verde-hoja: #81c784;
@@ -11,7 +11,9 @@
   --dorado: gold;
 }
 
-/* ===== Reset general ===== */
+/* ----------------------------------------------
+   🔄 RESET Y BASE
+------------------------------------------------- */
 body {
   margin: 0;
   font-family: Arial, sans-serif;
@@ -19,12 +21,13 @@ body {
   color: var(--texto-oscuro);
 }
 
-/* ===== Oculto ===== */
 .oculto {
   display: none !important;
 }
 
-/* ===== Header ===== */
+/* ----------------------------------------------
+   📌 HEADER Y NAVEGACIÓN
+------------------------------------------------- */
 header {
   background-color: var(--verde-principal);
   padding: 10px 20px;
@@ -52,7 +55,7 @@ nav a {
   color: white;
   text-decoration: none;
   font-weight: bold;
-  cursor: pointer; /* Para links sin href */
+  cursor: pointer;
 }
 
 nav a:hover,
@@ -61,7 +64,9 @@ nav a:focus {
   outline: none;
 }
 
-/* ===== Formulario ===== */
+/* ----------------------------------------------
+   📋 FORMULARIOS (LOGIN, REGISTRO)
+------------------------------------------------- */
 .form-container {
   max-width: 400px;
   margin: 40px auto;
@@ -107,7 +112,7 @@ form button {
   width: 100%;
   padding: 12px;
   background-color: var(--verde-hoja);
-  color: #fff; /* Mejor contraste */
+  color: #fff;
   border: none;
   border-radius: 10px;
   font-size: 1rem;
@@ -121,7 +126,56 @@ form button:hover {
   background-color: var(--verde-principal);
 }
 
-/* ===== Footer ===== */
+/* ----------------------------------------------
+   📦 SECCIONES GENERALES (contenedores dinámicos)
+------------------------------------------------- */
+main > div:not(.form-container) {
+  max-width: 800px;
+  margin: 30px auto;
+  padding: 20px;
+  background-color: white;
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+/* ----------------------------------------------
+   📊 TABLAS (vista info paseadores)
+------------------------------------------------- */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+th, td {
+  padding: 12px;
+  border: 1px solid #ccc;
+  text-align: left;
+}
+
+th {
+  background-color: var(--verde-claro);
+  color: var(--texto-oscuro);
+}
+
+/* ----------------------------------------------
+   📃 LISTAS (solicitudes, perros asignados)
+------------------------------------------------- */
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+ul li {
+  background-color: var(--verde-claro);
+  margin-bottom: 10px;
+  padding: 15px;
+  border-radius: 10px;
+}
+
+/* ----------------------------------------------
+   📎 FOOTER
+------------------------------------------------- */
 footer {
   background-color: var(--verde-principal);
   padding: 10px 20px;
@@ -140,7 +194,9 @@ footer {
   transform: scale(1.2);
 }
 
-/* ===== Responsive ===== */
+/* ----------------------------------------------
+   📱 RESPONSIVE
+------------------------------------------------- */
 @media (max-width: 600px) {
   header {
     flex-direction: column;
@@ -155,5 +211,13 @@ footer {
 
   #logo {
     height: 80px;
+  }
+
+  .form-container {
+    width: 90%;
+  }
+
+  main > div:not(.form-container) {
+    width: 90%;
   }
 }

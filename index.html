@@ -1,19 +1,20 @@
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Hundler</title>
-  <!--Link de css-->
-  <link rel="stylesheet" href="css/styles.css"/>
-  <!--Logos del footer-->
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/styles.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
   <div id="contenedor">
     <!-- HEADER -->
-    <header>
-      <img id="logo" src="img/logoblanco.png" alt="Hundler" />
-      <nav>
+    <header role="banner">
+      <img id="logo" src="img/logoblanco.png" alt="Hundler - logo" />
+      <nav role="navigation">
         <ul id="navPrincipal">
           <li><a id="aContratarPaseadorCliente" class="oculto">Contratar paseador</a></li>
           <li><a id="aVerReservaCliente" class="oculto">Mi reserva</a></li>
@@ -24,11 +25,11 @@
     </header>
 
     <!-- CONTENIDO PRINCIPAL -->
-    <main>
+    <main role="main">
       <!-- LOGIN -->
       <div id="divLogin" class="form-container">
         <h2>Iniciar sesión</h2>
-        <form>
+        <form onsubmit="return false;">
           <label for="txtUsuLogin">Usuario</label>
           <input id="txtUsuLogin" type="text" />
 
@@ -37,6 +38,7 @@
 
           <button id="btnLoginCliente" type="button">Ingresar como CLIENTE</button>
           <button id="btnLoginPaseador" type="button">Ingresar como PASEADOR</button>
+
           <p id="pMsgLogin"></p>
           <p style="text-align: center;">
             ¿No estás registrado?
@@ -48,7 +50,7 @@
       <!-- REGISTRO CLIENTE -->
       <div id="divRegistroCliente" class="form-container oculto">
         <h2>Registro cliente</h2>
-        <form>
+        <form onsubmit="return false;">
           <label for="txtUsuReg">Usuario</label>
           <input id="txtUsuReg" type="text" />
 
@@ -71,22 +73,70 @@
         </form>
       </div>
 
-      <!-- Más secciones como contratar paseador, mi reserva, etc... -->
+      <!-- VISTA CLIENTE: Contratar paseador -->
+      <div id="divContratarPaseador" class="oculto">
+        <h2>Seleccionar paseador</h2>
+        <select id="slcPaseadores"></select>
+        <button id="btnContratar">Contratar</button>
+        <p id="pMsgContratar"></p>
+      </div>
+
+      <!-- VISTA CLIENTE: Cancelar reserva -->
+      <div id="divCancelarReserva" class="oculto">
+        <h2>Mi reserva</h2>
+        <p id="pInfoReserva"></p>
+        <button id="btnCancelarReserva">Cancelar reserva</button>
+      </div>
+
+      <!-- VISTA CLIENTE: Ver info paseadores -->
+      <div id="divInfoPaseadores" class="oculto">
+        <h2>Paseadores disponibles</h2>
+        <table id="tablaInfoPaseadores">
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Perros asignados</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Completar desde JS -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- VISTA PASEADOR: Gestionar solicitudes -->
+      <div id="divGestionarContrataciones" class="oculto">
+        <h2>Solicitudes pendientes</h2>
+        <ul id="listaSolicitudes">
+          <!-- Completar desde JS -->
+        </ul>
+      </div>
+
+      <!-- VISTA PASEADOR: Ver perros asignados -->
+      <div id="divVerPerrosAsignados" class="oculto">
+        <h2>Mis perros asignados</h2>
+        <ul id="listaPerrosAsignados">
+          <!-- Completar desde JS -->
+        </ul>
+        <p id="pResumenCupos"></p>
+      </div>
     </main>
 
     <!-- FOOTER -->
     <footer>
       <div class="footer-content">
-        <p class="copyright">© 2025 Hundler. Todos los derechos reservados.</p>
+        <p class="copyright">
+          © 2025 Hundler. Todos los derechos reservados.
+        </p>
         <div class="social-icons">
-          <a href="#"><i class="fab fa-facebook-f"></i></a>
-          <a href="#"><i class="fab fa-instagram"></i></a>
-          <a href="#"><i class="fab fa-whatsapp"></i></a>
+          <a href="#"><i class="fab fa-facebook-f" aria-hidden="true"></i></a>
+          <a href="#"><i class="fab fa-instagram" aria-hidden="true"></i></a>
+          <a href="#"><i class="fab fa-whatsapp" aria-hidden="true"></i></a>
         </div>
       </div>
     </footer>
 
-    <!-- JS -->
+    <!-- SCRIPTS -->
     <script src="js/libreria.js"></script>
     <script src="js/clases.js"></script>
     <script src="js/sistema.js"></script>
