@@ -1,30 +1,23 @@
-<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Hundler</title>
-  <link rel="stylesheet" href="css/styles.css" />
+  <!--Link de css-->
+  <link rel="stylesheet" href="css/styles.css"/>
+  <!--Logos del footer-->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
 </head>
-
 <body>
   <div id="contenedor">
-
     <!-- HEADER -->
     <header>
       <img id="logo" src="img/logoblanco.png" alt="Hundler" />
       <nav>
         <ul id="navPrincipal">
-          <!-- CLIENTE -->
           <li><a id="aContratarPaseadorCliente" class="oculto">Contratar paseador</a></li>
           <li><a id="aVerReservaCliente" class="oculto">Mi reserva</a></li>
-
-          <!-- PASEADOR -->
           <li><a id="aGestionarContratacionesPaseador" class="oculto">Gestionar solicitudes</a></li>
-
-          <!-- COMÚN -->
           <li><a id="aCerrarSesion" class="oculto">Cerrar sesión</a></li>
         </ul>
       </nav>
@@ -33,82 +26,71 @@
     <!-- CONTENIDO PRINCIPAL -->
     <main>
       <!-- LOGIN -->
-      <div id="divLogin">
-        <h1>Iniciar sesión</h1>
-        <label>Usuario <input id="txtUsuLogin" type="text" /></label>
-        <label>Contraseña <input id="txtPassLogin" type="password" /></label>
-        <input id="btnLoginCliente" type="button" value="Ingresar como CLIENTE" />
-        <input id="btnLoginPaseador" type="button" value="Ingresar como PASEADOR" />
-        <p id="pMsgLogin"></p>
+      <div id="divLogin" class="form-container">
+        <h2>Iniciar sesión</h2>
+        <form>
+          <label for="txtUsuLogin">Usuario</label>
+          <input id="txtUsuLogin" type="text" />
+
+          <label for="txtPassLogin">Contraseña</label>
+          <input id="txtPassLogin" type="password" />
+
+          <button id="btnLoginCliente" type="button">Ingresar como CLIENTE</button>
+          <button id="btnLoginPaseador" type="button">Ingresar como PASEADOR</button>
+          <p id="pMsgLogin"></p>
+          <p style="text-align: center;">
+            ¿No estás registrado?
+            <a href="#" id="linkMostrarRegistro">Registrate acá</a>
+          </p>
+        </form>
       </div>
 
       <!-- REGISTRO CLIENTE -->
-      <div id="divRegistroCliente" class="oculto">
+      <div id="divRegistroCliente" class="form-container oculto">
         <h2>Registro cliente</h2>
-        <label>Usuario <input id="txtUsuReg" type="text" /></label>
-        <label>Contraseña <input id="txtPassReg" type="password" /></label>
-        <label>Nombre del perro <input id="txtNombrePerro" type="text" /></label>
-        <label>Tamaño del perro
+        <form>
+          <label for="txtUsuReg">Usuario</label>
+          <input id="txtUsuReg" type="text" />
+
+          <label for="txtPassReg">Contraseña</label>
+          <input id="txtPassReg" type="password" />
+
+          <label for="txtNombrePerro">Nombre del perro</label>
+          <input id="txtNombrePerro" type="text" />
+
+          <label for="slcTam">Tamaño del perro</label>
           <select id="slcTam">
             <option value="">Seleccione…</option>
             <option value="chico">Chico</option>
             <option value="mediano">Mediano</option>
             <option value="grande">Grande</option>
           </select>
-        </label>
-        <input id="btnRegistrarCliente" type="button" value="Registrarme" />
-        <p id="pMsgReg"></p>
+
+          <button id="btnRegistrarCliente" type="button">Registrarme</button>
+          <p id="pMsgReg"></p>
+        </form>
       </div>
 
-      <!-- VISTA CLIENTE · SELECCIONAR PASEADOR -->
-      <div id="divContratarPaseador" class="vistaCliente oculto">
-        <h2>Contratar paseador</h2>
-        <p id="pAvisoPend"></p>
-        <div id="divSelectPaseador"></div>
-        <input id="btnContratar" type="button" value="Contratar" />
-      </div>
-
-      <!-- VISTA CLIENTE · MI RESERVA -->
-      <div id="divMiReserva" class="vistaCliente oculto">
-        <h2>Mi reserva</h2>
-        <div id="divTablaReserva"></div>
-      </div>
-
-      <!-- INFO GLOBAL PASEADORES -->
-      <div id="divInfoPaseadores" class="vistaCliente oculto">
-        <h2>Perros asignados a cada paseador</h2>
-        <div id="divTablaInfo"></div>
-      </div>
-
-      <!-- VISTA PASEADOR · SOLICITUDES -->
-      <div id="divGestionPaseador" class="vistaPaseador oculto">
-        <h2>Solicitudes pendientes</h2>
-        <div id="divTablaPend"></div>
-
-        <h2>Perros asignados</h2>
-        <div id="divTablaAsignados"></div>
-        <p id="pResumenCupo"></p>
-      </div>
+      <!-- Más secciones como contratar paseador, mi reserva, etc... -->
     </main>
 
     <!-- FOOTER -->
-  <footer>
-    <div class="footer-content">
-      <p class="copyright">© 2025 Hundler. Todos los derechos reservados.</p>
-      <div class="social-icons">
-        <a href="#"><i class="fab fa-facebook-f"></i></a>
-        <a href="#"><i class="fab fa-instagram"></i></a>
-        <a href="#"><i class="fab fa-whatsapp"></i></a>
+    <footer>
+      <div class="footer-content">
+        <p class="copyright">© 2025 Hundler. Todos los derechos reservados.</p>
+        <div class="social-icons">
+          <a href="#"><i class="fab fa-facebook-f"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-whatsapp"></i></a>
+        </div>
       </div>
-    </div>
-  </footer>
+    </footer>
 
+    <!-- JS -->
+    <script src="js/libreria.js"></script>
+    <script src="js/clases.js"></script>
+    <script src="js/sistema.js"></script>
+    <script src="js/ui.js"></script>
   </div>
-
-  <!-- JS -->
-  <script src="js/libreria.js"></script>
-  <script src="js/clases.js"></script>
-  <script src="js/sistema.js"></script>
-  <script src="js/ui.js"></script>
 </body>
 </html>

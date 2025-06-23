@@ -1,6 +1,6 @@
 window.addEventListener("load", inicio);
 
-let sistema = new Sistema();   /* ← ya incorpora la precarga */
+let sistema = new Sistema();
 
 /////////////////////////////////////////////////////////
 // INICIO
@@ -34,6 +34,14 @@ function inicio() {
   document.querySelector("#btnContratar")
           .addEventListener("click", contratarPaseadorUI);
 
+  /* Mostrar registro */
+  document.querySelector("#linkMostrarRegistro")
+          .addEventListener("click", function (e) {
+    e.preventDefault();
+    ocultarTodo();
+    mostrarElemento("divRegistroCliente");
+  });
+
   ocultarTodo();
   prepararLogin();
 }
@@ -54,7 +62,7 @@ function ocultarTodo() {
 
 function prepararLogin() {
   mostrarElemento("divLogin");
-  mostrarElemento("divRegistroCliente");
+  ocultarElemento("divRegistroCliente");
   ocultarElemento("navPrincipal");
   mostrarAlgoHTML("pMsgLogin", "");
   mostrarAlgoHTML("pMsgReg", "");
@@ -242,7 +250,6 @@ function mostrarBotonesPaseador() {
 }
 
 function mostrarSolicitudesPaseadorUI() {
-  /* implementado en la versión anterior – sin cambios */
   const pas = sistema.usuarioLogueado;
   if (!pas) return;
 
@@ -283,7 +290,6 @@ function procesarContratacionUI(id) {
 }
 
 function mostrarPerrosAsignadosUI() {
-  /* igual que la versión anterior */
   const pas = sistema.usuarioLogueado;
   if (!pas) return;
 
