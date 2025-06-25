@@ -25,6 +25,8 @@ function inicio() {
           .addEventListener("click", mostrarVistaContratarPaseador);
   document.querySelector("#aVerReservaCliente")
           .addEventListener("click", mostrarVistaMiReserva);
+  document.querySelector("#aVerPaseadoresCliente")
+          .addEventListener("click", mostrarListadoPaseadoresUI);
 
   /* Navegación – paseador */
   document.querySelector("#aGestionarContratacionesPaseador")
@@ -49,6 +51,7 @@ function inicio() {
   ocultarTodo();
   prepararLogin();
 }
+
 /////////////////////////////////////////////////////////
 // VISTAS
 /////////////////////////////////////////////////////////
@@ -177,10 +180,10 @@ function cerrarSesionUI() {
 /////////////////////////////////////////////////////////
 // MENÚ BOTONES VISIBILIDAD
 /////////////////////////////////////////////////////////
-
 function mostrarBotonesCliente() {
   mostrarElemento("liContratarPaseadorCliente");
   mostrarElemento("liVerReservaCliente");
+  mostrarElemento("liVerPaseadores"); 
   mostrarElemento("liCerrarSesion");
   ocultarElemento("liGestionarContratacionesPaseador");
 }
@@ -190,6 +193,15 @@ function mostrarBotonesPaseador() {
   mostrarElemento("liCerrarSesion");
   ocultarElemento("liContratarPaseadorCliente");
   ocultarElemento("liVerReservaCliente");
+}
+
+//Agregado por Caro: Controla la visualización del listado completo de paseadores para el perfil cliente.
+function mostrarListadoPaseadoresUI() {
+  ocultarTodo();
+  mostrarElemento("navPrincipal");
+  mostrarBotonesCliente();
+  mostrarElemento("divListadoPaseadores");
+  cargarListadoPaseadoresUI(); 
 }
 
 /////////////////////////////////////////////////////////

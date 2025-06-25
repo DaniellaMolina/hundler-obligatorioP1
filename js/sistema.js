@@ -4,23 +4,37 @@
 
 class Sistema {
   constructor() {
-    // Listas para almacenar clientes, paseadores y contrataciones
     this.clientes        = [];
     this.paseadores      = [];
     this.contrataciones  = [];
-    this.usuarioLogueado = null;  // Usuario actualmente logueado (cliente o paseador)
+    this.usuarioLogueado = null;
 
-    this.precargaPaseadores(); // Carga inicial de paseadores predefinidos
+    this.precargaPaseadores();
+    this.precargaClientes();
+    this.precargaContrataciones();
   }
 
   ///////////////////////////////////////////////////////
   // CLIENTES
   ///////////////////////////////////////////////////////
+  precargaClientes() {
+    const nombresPerros = ["Max", "Bella", "Luna", "Charlie", "Lucy", "Cooper", "Daisy", "Buddy", "Molly", "Rocky", "Coco", "Bear", "Sadie", "Toby", "Lola", "Duke", "Zoe", "Jack", "Maggie", "Oliver"];
+    const tamanios = ["chico", "mediano", "grande"];
+    for (let i = 0; i < 20; i++) {
+      const tamanio = tamanios[Math.floor(Math.random() * tamanios.length)];
+      this.agregarCliente(
+        nombresPerros[i],
+        `cliente${i+1}`,
+        `Pass${i+1}`,
+        `Cliente ${i+1}`,
+        tamanio
+      );
+    }
+  }
 
   agregarCliente(pNombrePerro, pNombreUsuario, pContrasenia, pNombre, pTamanioPerro) {
     let seAgrego = false;
 
-    // Validaciones básicas: que haya datos, contraseña válida y usuario no repetido (case insensitive)
     if (
       hayDatos(pNombre) &&
       hayDatos(pNombreUsuario) &&
@@ -30,7 +44,6 @@ class Sistema {
       contraseniaValida(pContrasenia) &&
       this.obtenerClientePorNombreUsuario(pNombreUsuario) === null
     ) {
-      // Crear instancia de Cliente y agregar a la lista (normaliza nombreUsuario a lowercase en Cliente)
       let nuevo = new Cliente(
         pNombre,
         pNombreUsuario,
@@ -65,11 +78,11 @@ class Sistema {
   ///////////////////////////////////////////////////////
 
   precargaPaseadores() {
-    // Ajusté para agregar parámetros completos a constructor Paseador 
     this.paseadores.push(new Paseador("maria", "1234", 16, "grande", "", "Maria Lopez", "Experta paseadora", 5));
     this.paseadores.push(new Paseador("carlos", "1234", 16, "grande", "", "Carlos Mendez", "Amante de los perros grandes", 4));
     this.paseadores.push(new Paseador("lucia", "1234", 8, "mediano", "", "Lucia Fernandez", "Especialista en perros medianos", 4));
     this.paseadores.push(new Paseador("julian", "1234", 4, "chico", "", "Julian Perez", "Cuida perros chicos con cariño", 3));
+    this.paseadores.push(new Paseador("ana", "1234", 12, "mediano", "", "Ana Gutierrez", "Paseadora de perros medianos", 4));
   }
 
   obtenerPaseadorPorNombreUsuario(nick) {
@@ -92,11 +105,30 @@ class Sistema {
   // CONTRATACIONES
   ///////////////////////////////////////////////////////
 
+  precargaContrataciones() {
+    if (this.clientes.length === 0 || this.paseadores.length === 0) return;
+
+    const estados = ["Pendiente", "Aprobada", "Rechazada"];
+
+    for (let i = 0; i < 10; i++) {
+      const cliente = this.clientes[i % this.clientes.length]; 
+      const paseador = this.paseadores[i % this.paseadores.length]; 
+      const estado = estados[i % estados.length]; 
+
+      const contratacion = new Contratacion(cliente, paseador);
+      contratacion.estado = estado;
+
+      if (estado === "Aprobada") {
+        paseador.agregarContratacionAprobada(contratacion);
+      }
+
+      this.contrataciones.push(contratacion);
+    }
+  }
+
   tieneContratacionPendienteCliente(cliente) {
     if (!cliente) return false;
-    return this.contrataciones.some(
-      c => c.cliente.id === cliente.id && c.estado === "Pendiente"
-    );
+    return this.contrataciones.some(c => c.cliente.id === cliente.id && c.estado === "Pendiente");
   }
 
   obtenerContratacionesCliente(cliente) {
@@ -110,36 +142,28 @@ class Sistema {
   }
 
   contarCuposUsados(paseador) {
-    if (!paseador) return 0;
-    let total = 0;
-    for (let c of this.contrataciones) {
-      if (c.paseador.id === paseador.id && c.estado === "Aprobada") {
-        total += this.obtenerCuposPorTamanio(c.tamanioPerro);
-      }
-    }
-    return total;
+    return this.contrataciones.reduce((acc, c) =>
+      c.paseador.id === paseador.id && c.estado === "Aprobada"
+        ? acc + this.obtenerCuposPorTamanio(c.tamanioPerro)
+        : acc, 0);
   }
 
   obtenerCuposPorTamanio(tam) {
     if (tam === "grande") return 4;
     if (tam === "mediano") return 2;
-    return 1;  // chico o por defecto
+    return 1;
   }
 
   tieneCupoDisponible(paseador, tamPerro) {
     if (!paseador || !tamPerro) return false;
-
-    // Para seguridad, paseador solo puede tener perros del mismo tamaño o vacíos
     if (paseador.tamanioPerro !== tamPerro) return false;
 
-    let cuposUsados = this.contarCuposUsados(paseador);
-    let cuposNecesarios = this.obtenerCuposPorTamanio(tamPerro);
-
-    return (cuposUsados + cuposNecesarios) <= paseador.cupos;
+    let usados = this.contarCuposUsados(paseador);
+    let necesarios = this.obtenerCuposPorTamanio(tamPerro);
+    return (usados + necesarios) <= paseador.cuposMaximos;
   }
 
   obtenerPaseadoresDisponibles(tamPerro) {
-    if (!tamPerro) return [];
     return this.paseadores.filter(p => this.tieneCupoDisponible(p, tamPerro));
   }
 
@@ -151,10 +175,7 @@ class Sistema {
   }
 
   cancelarReservaPendiente(cliente) {
-    if (!cliente) return false;
-    let c = this.contrataciones.find(
-      con => con.cliente.id === cliente.id && con.estado === "Pendiente"
-    );
+    let c = this.contrataciones.find(con => con.cliente.id === cliente.id && con.estado === "Pendiente");
     if (c) {
       c.estado = "Cancelada";
       return true;
@@ -168,14 +189,14 @@ class Sistema {
 
     let p = c.paseador;
     if (!this.tieneCupoDisponible(p, c.tamanioPerro)) {
-      c.estado = "Rechazada"; // sin cupo
+      c.estado = "Rechazada";
       return false;
     }
 
     c.estado = "Aprobada";
+    p.agregarContratacionAprobada(c);
 
-    // Rechaza todas las pendientes que no caben porque ya se quedó sin cupo
-    if (this.contarCuposUsados(p) >= p.cupos) {
+    if (p.cuposDisponibles <= 0) {
       this.contrataciones.forEach(otro => {
         if (otro.paseador.id === p.id && otro.estado === "Pendiente") {
           otro.estado = "Rechazada";
@@ -183,7 +204,6 @@ class Sistema {
       });
     }
 
-    // Rechaza las incompatibles (mezcla de perros chicos y grandes)
     this.contrataciones.forEach(otro => {
       if (
         otro.paseador.id === p.id &&
@@ -204,15 +224,13 @@ class Sistema {
 
   cuposDisponiblesParaPaseador(paseador) {
     if (!paseador) return 0;
-    return paseador.cupos - this.contarCuposUsados(paseador);
+    return paseador.cuposMaximos - this.contarCuposUsados(paseador);
   }
 
   obtenerContratacionesPendientesPorPaseador(nick) {
     if (!nick) return [];
     nick = nick.toLowerCase();
-    return this.contrataciones.filter(
-      c => c.paseador.nombreUsuario === nick && c.estado === "Pendiente"
-    );
+    return this.contrataciones.filter(c => c.paseador.nombreUsuario === nick && c.estado === "Pendiente");
   }
 
   obtenerPerrosAsignados(nick) {
@@ -231,8 +249,8 @@ class Sistema {
     let ocupados = this.contarCuposUsados(p);
     return {
       ocupados,
-      maximo: p.cupos,
-      porcentaje: ((ocupados / p.cupos) * 100).toFixed(0)
+      maximo: p.cuposMaximos,
+      porcentaje: ((ocupados / p.cuposMaximos) * 100).toFixed(0)
     };
   }
 }

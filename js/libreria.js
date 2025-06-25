@@ -7,12 +7,12 @@
 /////////////////////////////////////////////////////////
 
 function obtenerValorDeUnCampo(pIdDelCampo) {
-  let elemento = document.querySelector("#" + pIdDelCampo);
+  const elemento = document.getElementById(pIdDelCampo);
   return elemento ? elemento.value.trim() : "";
 }
 
 function obtenerValorDeUnCampoNumerico(pIdDelCampo) {
-  let elemento = document.querySelector("#" + pIdDelCampo);
+  const elemento = document.getElementById(pIdDelCampo);
   return elemento ? Number(elemento.value) : NaN;
 }
 
@@ -25,14 +25,15 @@ function esNumeroYPositivo(pNumero) {
 }
 
 function hayDatos(pString) {
-  return typeof pString === "string" && pString.trim() !== "";
+  return typeof pString === "string" && pString.trim().length > 0;
 }
 
 function contraseniaValida(pContrasenia) {
-  if (typeof pContrasenia !== "string" || pContrasenia.length < 5) {
-    return false;
-  }
-  return /[A-Z]/.test(pContrasenia) && /[a-z]/.test(pContrasenia) && /\d/.test(pContrasenia);
+  return typeof pContrasenia === "string" &&
+         pContrasenia.length >= 5 &&
+         /[A-Z]/.test(pContrasenia) &&
+         /[a-z]/.test(pContrasenia) &&
+         /\d/.test(pContrasenia);
 }
 
 /////////////////////////////////////////////////////////
@@ -40,36 +41,36 @@ function contraseniaValida(pContrasenia) {
 /////////////////////////////////////////////////////////
 
 function ocultarElemento(idElemento) {
-  let elemento = document.querySelector(`#${idElemento}`);
-  if (elemento) {
-    elemento.classList.add("oculto");
+  const el = document.getElementById(idElemento);
+  if (el) {
+    el.classList.add("oculto");
   } else {
     console.warn(`ocultarElemento: No se encontró el elemento con id '${idElemento}'`);
   }
 }
 
 function mostrarElemento(idElemento) {
-  let elemento = document.querySelector(`#${idElemento}`);
-  if (elemento) {
-    elemento.classList.remove("oculto");
+  const el = document.getElementById(idElemento);
+  if (el) {
+    el.classList.remove("oculto");
   } else {
     console.warn(`mostrarElemento: No se encontró el elemento con id '${idElemento}'`);
   }
 }
 
 function limpiarCampo(idDelCampo) {
-  let elemento = document.querySelector(`#${idDelCampo}`);
-  if (elemento) {
-    elemento.value = "";
+  const el = document.getElementById(idDelCampo);
+  if (el) {
+    el.value = "";
   } else {
-    console.warn(`limpiarCampo: No se encontró el elemento con id '${idDelCampo}'`);
+    console.warn(`limpiarCampo: No se encontró el campo con id '${idDelCampo}'`);
   }
 }
 
 function mostrarAlgoHTML(idDelElemento, contenido) {
-  let elemento = document.querySelector(`#${idDelElemento}`);
-  if (elemento) {
-    elemento.innerHTML = contenido;
+  const el = document.getElementById(idDelElemento);
+  if (el) {
+    el.innerHTML = contenido;
   } else {
     console.warn(`mostrarAlgoHTML: No se encontró el elemento con id '${idDelElemento}'`);
   }

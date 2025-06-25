@@ -22,6 +22,9 @@
           <li id="liVerReservaCliente" class="oculto">
             <button id="aVerReservaCliente">Mi reserva</button>
           </li>
+          <li id="liVerPaseadoresCliente" class="oculto">
+            <button id="aVerPaseadores">Ver paseadores</button>
+          </li>
           <li id="liGestionarContratacionesPaseador" class="oculto">
             <button id="aGestionarContratacionesPaseador">Gestionar solicitudes</button>
           </li>
@@ -78,7 +81,8 @@
 
           <button id="btnRegistrarCliente" type="button">Registrarme</button>
           <p id="pMsgReg"></p>
-          <button id="btnVolverLoginDesdeRegistro">Iniciar sesión</button>        </form>
+          <button id="btnVolverLoginDesdeRegistro">Iniciar sesión</button>
+        </form>
       </div>
 
       <!-- VISTA CLIENTE: Contratar paseador -->
@@ -93,7 +97,8 @@
       <div id="divCancelarReserva" class="oculto">
         <h2>Mi reserva</h2>
         <p id="pInfoReserva"></p>
-        <button id="btnCancelarReserva">Cancelar reserva</button>
+        <!-- Botón comentado por no estar implementado aún -->
+        <!-- <button id="btnCancelarReserva">Cancelar reserva</button> -->
       </div>
 
       <!-- VISTA CLIENTE: Ver info paseadores -->
@@ -115,9 +120,7 @@
       <!-- VISTA PASEADOR: Gestionar solicitudes -->
       <div id="divGestionarContrataciones" class="oculto">
         <h2>Solicitudes pendientes</h2>
-        <ul id="listaSolicitudes">
-          <!-- Completar desde JS -->
-        </ul>
+        <!-- Se genera dinámicamente desde JS como tabla -->
       </div>
 
       <!-- VISTA PASEADOR: Ver perros asignados -->
@@ -128,6 +131,25 @@
         </ul>
         <p id="pResumenCupos"></p>
       </div>
+
+      <!-- VISTA CLIENTE: Listado visual de paseadores -->
+      <div id="divListadoPaseadores" class="oculto">
+        <h2>Paseadores disponibles</h2>
+        <div class="filtros">
+          <label for="filtroTamanio">Filtrar por tamaño:</label>
+          <select id="filtroTamanio">
+            <option value="todos">Todos</option>
+            <option value="chico">Chico</option>
+            <option value="mediano">Mediano</option>
+            <option value="grande">Grande</option>
+          </select>
+          <button id="btnAplicarFiltro">Aplicar</button>
+        </div>
+        <div id="contenedorPaseadores" class="grid-paseadores">
+          <!-- Cards generados desde JS -->
+        </div>
+      </div>
+
     </main>
 
     <!-- FOOTER -->
