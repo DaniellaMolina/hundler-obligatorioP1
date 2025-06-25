@@ -25,7 +25,7 @@ function inicio() {
           .addEventListener("click", mostrarVistaContratarPaseador);
   document.querySelector("#aVerReservaCliente")
           .addEventListener("click", mostrarVistaMiReserva);
-  document.querySelector("#aVerPaseadoresCliente")
+  document.querySelector("#aVerPaseadores")
           .addEventListener("click", mostrarListadoPaseadoresUI);
 
   /* Navegación – paseador */
@@ -51,7 +51,6 @@ function inicio() {
   ocultarTodo();
   prepararLogin();
 }
-
 /////////////////////////////////////////////////////////
 // VISTAS
 /////////////////////////////////////////////////////////
