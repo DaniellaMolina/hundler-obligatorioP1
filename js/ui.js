@@ -32,6 +32,9 @@ function inicio() {
   document.querySelector("#aGestionarContratacionesPaseador")
           .addEventListener("click", mostrarVistaGestionPaseador);
 
+  document.querySelector("#aVerPerrosAsignadosPaseador")
+          .addEventListener("click", mostrarVistaVerPerrosAsignados);
+
   /* Logout */
   document.querySelector("#aCerrarSesion")
           .addEventListener("click", cerrarSesionUI);
@@ -52,11 +55,10 @@ function inicio() {
   document.querySelector("#btnAplicarFiltro")
           .addEventListener("click", cargarListadoPaseadoresUI);
   
-  /* Filtro de cencelar reserva */
+  /* Filtro de cancelar reserva */
   document.querySelector("#btnCancelarReserva")
         .addEventListener("click", cancelarReservaUI);
   
-
   ocultarTodo();
   prepararLogin();
 }
@@ -73,7 +75,8 @@ function ocultarTodo() {
     "divInfoPaseadores",
     "divGestionarContrataciones",
     "divVerPerrosAsignados",
-    "divListadoPaseadores"
+    "divListadoPaseadores",
+    "divMiReservaCliente"
   ].forEach(ocultarElemento);
 
   // Ocultar nav y todos sus botones
@@ -83,6 +86,7 @@ function ocultarTodo() {
     "liVerReservaCliente",
     "liVerPaseadoresCliente",
     "liGestionarContratacionesPaseador",
+    "liVerPerrosAsignadosPaseador",
     "liCerrarSesion"
   ].forEach(ocultarElemento);
 }
@@ -119,6 +123,7 @@ function cancelarReservaUI() {
   }
   mostrarVistaMiReserva();
 }
+
 function mostrarVistaGestionPaseador() {
   ocultarTodo();
   mostrarElemento("navPrincipal");
@@ -127,19 +132,31 @@ function mostrarVistaGestionPaseador() {
   mostrarSolicitudesPaseadorUI();
 }
 
+// ** Nueva función para mostrar la vista "Ver perros asignados" **
+function mostrarVistaVerPerrosAsignados() {
+  ocultarTodo();
+  mostrarElemento("navPrincipal");
+  mostrarBotonesPaseador();
+  mostrarElemento("divVerPerrosAsignados");
+  mostrarPerrosAsignadosUI();
+}
+
 /////////////////////////////////////////////////////////
 // MENÚ BOTONES VISIBILIDAD
 /////////////////////////////////////////////////////////
+
 function mostrarBotonesCliente() {
   mostrarElemento("liContratarPaseadorCliente");
   mostrarElemento("liVerReservaCliente");
   mostrarElemento("liVerPaseadoresCliente");
   mostrarElemento("liCerrarSesion");
   ocultarElemento("liGestionarContratacionesPaseador");
+  ocultarElemento("liVerPerrosAsignadosPaseador");
 }
 
 function mostrarBotonesPaseador() {
   mostrarElemento("liGestionarContratacionesPaseador");
+  mostrarElemento("liVerPerrosAsignadosPaseador"); 
   mostrarElemento("liCerrarSesion");
   ocultarElemento("liContratarPaseadorCliente");
   ocultarElemento("liVerReservaCliente");
@@ -267,7 +284,7 @@ function cerrarSesionUI() {
   if (pInfo) pInfo.textContent = "";
   if (btnCancelar) btnCancelar.style.display = "none";
 
-    // Ocultar la sección "Mi reserva"
+  // Ocultar la sección "Mi reserva"
   ocultarElemento("divMiReservaCliente");
 }
 
@@ -397,84 +414,20 @@ function mostrarReservaClienteUI() {
 // FUNCIONES PASEADOR
 /////////////////////////////////////////////////////////
 
-// Mostrar solicitudes pendientes (botón para aprobar)
-function mostrarSolicitudesPaseadorUI() {
-  const pas = sistema.usuarioLogueado;
-  if (!pas) return;
-
-  let solicitudes = sistema.obtenerContratacionesPendientesPorPaseador(pas.nombreUsuario);
-  let divSolicitudes = document.getElementById("listaSolicitudesPendientes");
-  let divAprobadas = document.getElementById("listaContratacionesAprobadas");
-
-  if (!divSolicitudes || !divAprobadas) return;
-
-  // Mostrar solicitudes pendientes
-  if (solicitudes.length === 0) {
-    divSolicitudes.textContent = "No hay solicitudes pendientes.";
-  } else {
-    divSolicitudes.innerHTML =
-      `<table>
-        <thead><tr><th>ID</th><th>Cliente</th><th>Perro</th><th>Tamaño</th><th></th></tr></thead>
-        <tbody>
-          ${solicitudes.map(c =>
-            `<tr>
-              <td>${c.id}</td>
-              <td>${c.cliente.nombreUsuario}</td>
-              <td>${c.cliente.nombrePerro}</td>
-              <td>${c.tamanioPerro}</td>
-              <td><button data-id="${c.id}" class="btnProcesar">Procesar</button></td>
-            </tr>`).join("")}
-        </tbody>
-      </table>`;
-
-    divSolicitudes.querySelectorAll(".btnProcesar").forEach(btn => {
-      btn.addEventListener("click", () =>
-        procesarContratacionUI(Number(btn.dataset.id))
-      );
-    });
-  }
-
-  // Mostrar contrataciones aprobadas
-  let aprobadas = sistema.obtenerContratacionesPaseador(pas).filter(c => c.estado === "Aprobada");
-
-  if (aprobadas.length === 0) {
-    divAprobadas.textContent = "No hay contrataciones aprobadas.";
-  } else {
-    divAprobadas.innerHTML =
-      `<table>
-        <thead><tr><th>ID</th><th>Cliente</th><th>Perro</th><th>Tamaño</th><th>Estado</th></tr></thead>
-        <tbody>
-          ${aprobadas.map(c =>
-            `<tr>
-              <td>${c.id}</td>
-              <td>${c.cliente.nombreUsuario}</td>
-              <td>${c.cliente.nombrePerro}</td>
-              <td>${c.tamanioPerro}</td>
-              <td>${c.estado}</td>
-            </tr>`).join("")}
-        </tbody>
-      </table>`;
-  }
-
-  mostrarPerrosAsignadosUI();
-}
-// Función para manejar aprobar y rechazar
+// Mostrar solicitudes pendientes y aprobadas (botones aprobar/rechazar)
 function mostrarSolicitudesPaseadorUI() {
   let pas = sistema.usuarioLogueado;
   if (!pas) return;
 
-  // Obtener solicitudes pendientes y aprobadas para el paseador
   let solicitudesPendientes = sistema.obtenerContratacionesPendientesPorPaseador(pas.nombreUsuario);
   let contratacionesAprobadas = sistema.obtenerContratacionesPaseador(pas)
     .filter(c => c.estado === "Aprobada");
 
-  // Contenedores
   let contPendientes = document.getElementById("listaSolicitudesPendientes");
   let contAprobadas = document.getElementById("listaContratacionesAprobadas");
 
   if (!contPendientes || !contAprobadas) return;
 
-  // Mostrar solicitudes pendientes
   if (solicitudesPendientes.length === 0) {
     contPendientes.textContent = "No hay solicitudes pendientes.";
   } else {
@@ -499,7 +452,6 @@ function mostrarSolicitudesPaseadorUI() {
       </table>`;
   }
 
-  // Asignar eventos a los botones aprobar/rechazar
   contPendientes.querySelectorAll(".btnProcesar").forEach(btn => {
     btn.addEventListener("click", () => {
       const id = Number(btn.dataset.id);
@@ -508,7 +460,6 @@ function mostrarSolicitudesPaseadorUI() {
     });
   });
 
-  // Mostrar contrataciones aprobadas
   if (contratacionesAprobadas.length === 0) {
     contAprobadas.textContent = "No tiene contrataciones aprobadas.";
   } else {
@@ -530,18 +481,16 @@ function mostrarSolicitudesPaseadorUI() {
       </table>`;
   }
 
-  // También actualizar la vista de perros asignados
   mostrarPerrosAsignadosUI();
 }
 
-// Modificamos esta función para manejar aprobar y rechazar
+// Aprobar y rechazar solicitudes
 function procesarContratacionUI(id, accion) {
   if (!id || !accion) return;
 
   if (accion === "aprobar") {
     sistema.aprobarContratacion(id);
   } else if (accion === "rechazar") {
-    // Cambiamos estado a Rechazada manualmente
     let c = sistema.contrataciones.find(ct => ct.id === id);
     if (c && c.estado === "Pendiente") {
       c.estado = "Rechazada";
@@ -549,4 +498,27 @@ function procesarContratacionUI(id, accion) {
   }
 
   mostrarSolicitudesPaseadorUI();
+}
+
+// Mostrar perros asignados a paseador
+function mostrarPerrosAsignadosUI() {
+  let paseador = sistema.usuarioLogueado;
+  if (!paseador) return;
+
+  let listaPerros = sistema.obtenerPerrosAsignados(paseador.nombreUsuario);
+  let ul = document.getElementById("listaPerrosAsignados");
+  let pResumen = document.getElementById("pResumenCupos");
+
+  ul.innerHTML = "";
+
+  if (listaPerros.length === 0) {
+    ul.innerHTML = "<li>No tiene perros asignados por ahora.</li>";
+  } else {
+    for (const cliente of listaPerros) {
+      ul.innerHTML += `<li>${cliente.nombrePerro} (dueño: ${cliente.nombreUsuario})</li>`;
+    }
+  }
+
+  let resumen = sistema.resumenCupoPaseador(paseador.nombreUsuario);
+  pResumen.textContent = `Ocupación: ${resumen.ocupados} / ${resumen.maximo} (${resumen.porcentaje}%)`;
 }
