@@ -396,24 +396,27 @@ function mostrarReservaClienteUI() {
 /////////////////////////////////////////////////////////
 // FUNCIONES PASEADOR
 /////////////////////////////////////////////////////////
+
+// Mostrar solicitudes pendientes (botón para aprobar)
 function mostrarSolicitudesPaseadorUI() {
   const pas = sistema.usuarioLogueado;
   if (!pas) return;
 
-  let lista = sistema.obtenerContratacionesPendientesPorPaseador(pas.nombreUsuario);
-  let div   = document.getElementById("divGestionarContrataciones");
-  if (!div) return;
+  let solicitudes = sistema.obtenerContratacionesPendientesPorPaseador(pas.nombreUsuario);
+  let divSolicitudes = document.getElementById("listaSolicitudesPendientes");
+  let divAprobadas = document.getElementById("listaContratacionesAprobadas");
 
-  div.innerHTML = "";
+  if (!divSolicitudes || !divAprobadas) return;
 
-  if (lista.length === 0) {
-    div.textContent = "No hay solicitudes pendientes.";
+  // Mostrar solicitudes pendientes
+  if (solicitudes.length === 0) {
+    divSolicitudes.textContent = "No hay solicitudes pendientes.";
   } else {
-    div.innerHTML =
+    divSolicitudes.innerHTML =
       `<table>
         <thead><tr><th>ID</th><th>Cliente</th><th>Perro</th><th>Tamaño</th><th></th></tr></thead>
         <tbody>
-          ${lista.map(c =>
+          ${solicitudes.map(c =>
             `<tr>
               <td>${c.id}</td>
               <td>${c.cliente.nombreUsuario}</td>
@@ -424,46 +427,126 @@ function mostrarSolicitudesPaseadorUI() {
         </tbody>
       </table>`;
 
-    div.querySelectorAll(".btnProcesar").forEach(btn => {
+    divSolicitudes.querySelectorAll(".btnProcesar").forEach(btn => {
       btn.addEventListener("click", () =>
         procesarContratacionUI(Number(btn.dataset.id))
       );
     });
   }
+
+  // Mostrar contrataciones aprobadas
+  let aprobadas = sistema.obtenerContratacionesPaseador(pas).filter(c => c.estado === "Aprobada");
+
+  if (aprobadas.length === 0) {
+    divAprobadas.textContent = "No hay contrataciones aprobadas.";
+  } else {
+    divAprobadas.innerHTML =
+      `<table>
+        <thead><tr><th>ID</th><th>Cliente</th><th>Perro</th><th>Tamaño</th><th>Estado</th></tr></thead>
+        <tbody>
+          ${aprobadas.map(c =>
+            `<tr>
+              <td>${c.id}</td>
+              <td>${c.cliente.nombreUsuario}</td>
+              <td>${c.cliente.nombrePerro}</td>
+              <td>${c.tamanioPerro}</td>
+              <td>${c.estado}</td>
+            </tr>`).join("")}
+        </tbody>
+      </table>`;
+  }
+
+  mostrarPerrosAsignadosUI();
+}
+// Función para manejar aprobar y rechazar
+function mostrarSolicitudesPaseadorUI() {
+  let pas = sistema.usuarioLogueado;
+  if (!pas) return;
+
+  // Obtener solicitudes pendientes y aprobadas para el paseador
+  let solicitudesPendientes = sistema.obtenerContratacionesPendientesPorPaseador(pas.nombreUsuario);
+  let contratacionesAprobadas = sistema.obtenerContratacionesPaseador(pas)
+    .filter(c => c.estado === "Aprobada");
+
+  // Contenedores
+  let contPendientes = document.getElementById("listaSolicitudesPendientes");
+  let contAprobadas = document.getElementById("listaContratacionesAprobadas");
+
+  if (!contPendientes || !contAprobadas) return;
+
+  // Mostrar solicitudes pendientes
+  if (solicitudesPendientes.length === 0) {
+    contPendientes.textContent = "No hay solicitudes pendientes.";
+  } else {
+    contPendientes.innerHTML =
+      `<table>
+        <thead>
+          <tr><th>ID</th><th>Cliente</th><th>Perro</th><th>Tamaño</th><th>Acciones</th></tr>
+        </thead>
+        <tbody>
+          ${solicitudesPendientes.map(c =>
+            `<tr>
+              <td>${c.id}</td>
+              <td>${c.cliente.nombreUsuario}</td>
+              <td>${c.cliente.nombrePerro}</td>
+              <td>${c.tamanioPerro}</td>
+              <td>
+                <button data-id="${c.id}" data-accion="aprobar" class="btnProcesar">Aprobar</button>
+                <button data-id="${c.id}" data-accion="rechazar" class="btnProcesar">Rechazar</button>
+              </td>
+            </tr>`).join("")}
+        </tbody>
+      </table>`;
+  }
+
+  // Asignar eventos a los botones aprobar/rechazar
+  contPendientes.querySelectorAll(".btnProcesar").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const id = Number(btn.dataset.id);
+      const accion = btn.dataset.accion;
+      procesarContratacionUI(id, accion);
+    });
+  });
+
+  // Mostrar contrataciones aprobadas
+  if (contratacionesAprobadas.length === 0) {
+    contAprobadas.textContent = "No tiene contrataciones aprobadas.";
+  } else {
+    contAprobadas.innerHTML =
+      `<table>
+        <thead>
+          <tr><th>ID</th><th>Cliente</th><th>Perro</th><th>Tamaño</th><th>Estado</th></tr>
+        </thead>
+        <tbody>
+          ${contratacionesAprobadas.map(c =>
+            `<tr>
+              <td>${c.id}</td>
+              <td>${c.cliente.nombreUsuario}</td>
+              <td>${c.cliente.nombrePerro}</td>
+              <td>${c.tamanioPerro}</td>
+              <td>${c.estado}</td>
+            </tr>`).join("")}
+        </tbody>
+      </table>`;
+  }
+
+  // También actualizar la vista de perros asignados
   mostrarPerrosAsignadosUI();
 }
 
-function procesarContratacionUI(id) {
-  sistema.aprobarContratacion(id);
+// Modificamos esta función para manejar aprobar y rechazar
+function procesarContratacionUI(id, accion) {
+  if (!id || !accion) return;
+
+  if (accion === "aprobar") {
+    sistema.aprobarContratacion(id);
+  } else if (accion === "rechazar") {
+    // Cambiamos estado a Rechazada manualmente
+    let c = sistema.contrataciones.find(ct => ct.id === id);
+    if (c && c.estado === "Pendiente") {
+      c.estado = "Rechazada";
+    }
+  }
+
   mostrarSolicitudesPaseadorUI();
-}
-
-function mostrarPerrosAsignadosUI() {
-  const pas = sistema.usuarioLogueado;
-  if (!pas) return;
-
-  let perros = sistema.obtenerPerrosAsignados(pas.nombreUsuario);
-  let div    = document.getElementById("divVerPerrosAsignados");
-  if (!div) return;
-
-  let ul = div.querySelector("#listaPerrosAsignados");
-  if (!ul) return;
-
-  ul.innerHTML = "";
-
-  if (perros.length === 0) {
-    ul.textContent = "No hay perros asignados.";
-  } else {
-    ul.innerHTML =
-      perros.map(p =>
-        `<li>${p.nombrePerro} (${p.tamanioPerro})</li>`
-      ).join("");
-  }
-
-  let res = sistema.resumenCupoPaseador(pas.nombreUsuario);
-  let pResumen = document.getElementById("pResumenCupos");
-  if (pResumen) {
-    pResumen.textContent =
-      `Cupos ocupados: ${res.ocupados} / ${res.maximo} (${res.porcentaje}%)`;
-  }
 }

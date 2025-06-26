@@ -114,19 +114,27 @@ class Sistema {
 
     const estados = ["Pendiente", "Aprobada", "Rechazada"];
 
-    for (let i = 0; i < 10; i++) {
-      let cliente = this.clientes[i % this.clientes.length]; 
-      let paseador = this.paseadores[i % this.paseadores.length]; 
-      let estado = estados[i % estados.length]; 
+    let contador = 0;
 
-      let contratacion = new Contratacion(cliente, paseador);
-      contratacion.estado = estado;
+    // Para asegurar que el tamaño del perro del cliente coincide con el del paseador
+    for (let paseador of this.paseadores) {
+      // Filtrar clientes con tamaño compatible
+      let clientesCompatibles = this.clientes.filter(c => c.tamanioPerro === paseador.tamanioPerro);
 
-      if (estado === "Aprobada") {
-        paseador.agregarContratacionAprobada(contratacion);
+      for (let cliente of clientesCompatibles) {
+        if (contador >= 10) break;
+
+        let estado = estados[contador % estados.length];
+        let contratacion = new Contratacion(cliente, paseador);
+        contratacion.estado = estado;
+
+        if (estado === "Aprobada") {
+          paseador.agregarContratacionAprobada(contratacion);
+        }
+
+        this.contrataciones.push(contratacion);
+        contador++;
       }
-
-      this.contrataciones.push(contratacion);
     }
   }
 
