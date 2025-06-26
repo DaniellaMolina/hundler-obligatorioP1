@@ -217,7 +217,195 @@ footer {
 .social-icons a:hover {
   transform: scale(1.2);
 }
+/* ----------------------------------------------
+   SECCIÓN CONTRATAR PASEADOR
+------------------------------------------------- */
+#divContratarPaseador {
+  max-width: 400px;
+  margin: 20px auto 40px auto;
+  font-family: Arial, sans-serif;
+  background-color: white;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  text-align: left;
+}
 
+#divContratarPaseador h2 {
+  margin-bottom: 16px;
+  font-size: 1.4rem;
+  color: var(--verde-principal);
+  font-weight: bold;
+}
+
+#slcPaseadores {
+  width: calc(100% - 120px);
+  padding: 10px 12px;
+  font-size: 1rem;
+  border: 2px solid var(--verde-principal);
+  border-radius: 10px;
+  box-sizing: border-box;
+  vertical-align: middle;
+  transition: border-color 0.3s ease;
+  cursor: pointer;
+  color: var(--texto-oscuro);
+  font-weight: 600;
+}
+
+#slcPaseadores:hover,
+#slcPaseadores:focus {
+  border-color: var(--verde-hover);
+  outline: none;
+}
+
+#btnContratar {
+  width: 100px;
+  margin-left: 15px;
+  padding: 10px 15px;
+  font-size: 1rem;
+  background-color: var(--verde-hoja);
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  vertical-align: middle;
+  transition: background-color 0.3s ease;
+}
+
+#btnContratar:hover,
+#btnContratar:focus {
+  background-color: var(--verde-principal);
+  outline: none;
+}
+
+#pMsgContratar {
+  margin-top: 12px;
+  color: #d9534f; /* rojo suave para mensajes de error */
+  font-weight: bold;
+  min-height: 1.2em;
+}
+
+/* ----------------------------------------------
+   CARDS DE PASEADORES
+------------------------------------------------- */
+.card-paseador {
+  background-color: var(--verde-bg);
+  border: 2px solid var(--verde-principal);
+  border-radius: 15px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 6px 12px rgba(102, 187, 106, 0.3);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: default;
+}
+
+.card-paseador:hover {
+  box-shadow: 0 12px 24px rgba(102, 187, 106, 0.5);
+  transform: translateY(-5px);
+  border-color: var(--verde-hover);
+}
+
+.card-paseador h3 {
+  margin-top: 0;
+  color: var(--verde-principal);
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+.card-paseador p {
+  margin: 5px 0;
+  color: var(--texto-oscuro);
+  line-height: 1.3;
+  font-size: 1rem;
+}
+
+.card-paseador p em {
+  color: var(--verde-principal);
+}
+/* ----------------------------------------------
+   BLOQUE FILTROS PASEADORES
+------------------------------------------------- */
+.filtros {
+  background-color: var(--verde-claro);
+  padding: 15px 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(102, 187, 106, 0.2);
+  margin-bottom: 25px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 15px;
+}
+
+.filtros label {
+  font-weight: bold;
+  color: var(--verde-principal);
+  flex: 1 1 150px;
+  min-width: 120px;
+}
+
+.filtros select {
+  flex: 1 1 150px;
+  max-width: 200px;
+  padding: 8px 10px;
+  border: 2px solid var(--verde-principal);
+  border-radius: 8px;
+  background-color: white;
+  color: var(--texto-oscuro);
+  font-weight: 600;
+  transition: border-color 0.3s ease;
+  cursor: pointer;
+}
+
+.filtros select:hover,
+.filtros select:focus {
+  border-color: var(--verde-hover);
+  outline: none;
+}
+
+.filtros button#btnAplicarFiltro {
+  padding: 10px 20px;
+  background-color: var(--verde-hoja);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  flex-shrink: 0;
+}
+
+.filtros button#btnAplicarFiltro:hover,
+.filtros button#btnAplicarFiltro:focus {
+  background-color: var(--verde-principal);
+  transform: scale(1.05);
+  outline: none;
+}
+
+/* ----------------------------------------------
+   BOTÓN CANCELAR RESERVA
+------------------------------------------------- */
+#btnCancelarReserva {
+  padding: 10px 20px;
+  background-color: #e57373; /* rojo suave para indicar acción de cancelar */
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+  display: inline-block;
+  margin-top: 15px;
+}
+
+#btnCancelarReserva:hover,
+#btnCancelarReserva:focus {
+  background-color: #d32f2f; /* rojo más intenso en hover */
+  outline: none;
+} 
 /* ----------------------------------------------
     RESPONSIVE
 ------------------------------------------------- */
@@ -245,3 +433,4 @@ footer {
     width: 90%;
   }
 }
+

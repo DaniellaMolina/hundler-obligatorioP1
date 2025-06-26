@@ -48,9 +48,19 @@ function inicio() {
     mostrarElemento("divRegistroCliente");
   });
 
+  /* Filtro de paseadores */
+  document.querySelector("#btnAplicarFiltro")
+          .addEventListener("click", cargarListadoPaseadoresUI);
+  
+  /* Filtro de cencelar reserva */
+  document.querySelector("#btnCancelarReserva")
+        .addEventListener("click", cancelarReservaUI);
+  
+
   ocultarTodo();
   prepararLogin();
 }
+
 /////////////////////////////////////////////////////////
 // VISTAS
 /////////////////////////////////////////////////////////
@@ -63,11 +73,18 @@ function ocultarTodo() {
     "divInfoPaseadores",
     "divGestionarContrataciones",
     "divVerPerrosAsignados",
+    "divListadoPaseadores"
   ].forEach(ocultarElemento);
 
   // Ocultar nav y todos sus botones
   ocultarElemento("navPrincipal");
-  ["liContratarPaseadorCliente", "liVerReservaCliente", "liGestionarContratacionesPaseador", "liCerrarSesion"].forEach(ocultarElemento);
+  [
+    "liContratarPaseadorCliente",
+    "liVerReservaCliente",
+    "liVerPaseadoresCliente",
+    "liGestionarContratacionesPaseador",
+    "liCerrarSesion"
+  ].forEach(ocultarElemento);
 }
 
 function prepararLogin() {
@@ -90,10 +107,18 @@ function mostrarVistaMiReserva() {
   ocultarTodo();
   mostrarElemento("navPrincipal");
   mostrarBotonesCliente();
-  mostrarElemento("divCancelarReserva");
+  mostrarElemento("divMiReservaCliente");
   mostrarReservaClienteUI();
 }
 
+function cancelarReservaUI() {
+  if (sistema.cancelarReservaPendiente(sistema.usuarioLogueado)) {
+    alert("Reserva cancelada con éxito.");
+  } else {
+    alert("No tiene una reserva pendiente para cancelar.");
+  }
+  mostrarVistaMiReserva();
+}
 function mostrarVistaGestionPaseador() {
   ocultarTodo();
   mostrarElemento("navPrincipal");
@@ -103,86 +128,12 @@ function mostrarVistaGestionPaseador() {
 }
 
 /////////////////////////////////////////////////////////
-// REGISTRO & LOGIN
-/////////////////////////////////////////////////////////
-function registrarClienteUI() {
-  let nombrePerro = obtenerValorDeUnCampo("txtNombrePerro");
-  let usuario     = obtenerValorDeUnCampo("txtUsuReg");
-  let pass        = obtenerValorDeUnCampo("txtPassReg");
-  let tamanio     = obtenerValorDeUnCampo("slcTam");
-
-  let errores = [];
-
-  if (!hayDatos(nombrePerro))   errores.push("Debe ingresar el nombre del perro.");
-  if (!hayDatos(usuario))       errores.push("Debe ingresar un nombre de usuario.");
-  if (!hayDatos(pass))          errores.push("Debe ingresar una contraseña.");
-  if (!hayDatos(tamanio))       errores.push("Debe seleccionar el tamaño del perro.");
-  if (!contraseniaValida(pass)) errores.push("La contraseña debe tener al menos 5 caracteres, incluyendo mayúscula, minúscula y número.");
-  if (sistema.obtenerClientePorNombreUsuario(usuario) !== null) errores.push("El usuario ya existe.");
-
-  let mensaje = "";
-
-  if (errores.length === 0) {
-    let ok = sistema.agregarCliente(nombrePerro, usuario, pass, usuario, tamanio);
-    mensaje = ok ? "¡Registro exitoso!" : "Error al registrar cliente.";
-    if (ok) {
-      ["txtNombrePerro", "txtUsuReg", "txtPassReg"].forEach(limpiarCampo);
-      document.querySelector("#slcTam").value = "";
-    }
-  } else {
-    mensaje = "<ul>" + errores.map(e => `<li>${e}</li>`).join("") + "</ul>";
-  }
-  mostrarAlgoHTML("pMsgReg", mensaje);
-}
-
-function volverLoginDesdeRegistroUI() {
-  ocultarTodo();
-  prepararLogin();
-}
-
-function loginClienteUI() {
-  let usuario = obtenerValorDeUnCampo("txtUsuLogin");
-  let pass    = obtenerValorDeUnCampo("txtPassLogin");
-
-  let ok = hayDatos(usuario) && hayDatos(pass) && sistema.loginCliente(usuario, pass);
-
-  if (ok) {
-    mostrarBotonesCliente();
-    mostrarVistaContratarPaseador();
-    mostrarAlgoHTML("pMsgLogin", "");
-  } else {
-    mostrarAlgoHTML("pMsgLogin", "Usuario y/o contraseña inválida.");
-  }
-}
-
-function loginPaseadorUI() {
-  let usuario = obtenerValorDeUnCampo("txtUsuLogin");
-  let pass    = obtenerValorDeUnCampo("txtPassLogin");
-
-  let ok = hayDatos(usuario) && hayDatos(pass) && sistema.loginPaseador(usuario, pass);
-
-  if (ok) {
-    mostrarBotonesPaseador();
-    mostrarVistaGestionPaseador();
-    mostrarAlgoHTML("pMsgLogin", "");
-  } else {
-    mostrarAlgoHTML("pMsgLogin", "Usuario y/o contraseña inválida.");
-  }
-}
-
-function cerrarSesionUI() {
-  sistema.usuarioLogueado = null;
-  ocultarTodo();
-  prepararLogin();
-}
-
-/////////////////////////////////////////////////////////
 // MENÚ BOTONES VISIBILIDAD
 /////////////////////////////////////////////////////////
 function mostrarBotonesCliente() {
   mostrarElemento("liContratarPaseadorCliente");
   mostrarElemento("liVerReservaCliente");
-  mostrarElemento("liVerPaseadores"); 
+  mostrarElemento("liVerPaseadoresCliente");
   mostrarElemento("liCerrarSesion");
   ocultarElemento("liGestionarContratacionesPaseador");
 }
@@ -192,15 +143,49 @@ function mostrarBotonesPaseador() {
   mostrarElemento("liCerrarSesion");
   ocultarElemento("liContratarPaseadorCliente");
   ocultarElemento("liVerReservaCliente");
+  ocultarElemento("liVerPaseadoresCliente");
 }
 
-//Agregado por Caro: Controla la visualización del listado completo de paseadores para el perfil cliente.
+/////////////////////////////////////////////////////////
+// LISTADO PASEADORES
+/////////////////////////////////////////////////////////
 function mostrarListadoPaseadoresUI() {
   ocultarTodo();
   mostrarElemento("navPrincipal");
   mostrarBotonesCliente();
   mostrarElemento("divListadoPaseadores");
-  cargarListadoPaseadoresUI(); 
+  cargarListadoPaseadoresUI();
+}
+
+function cargarListadoPaseadoresUI() {
+  const contenedor = document.getElementById("contenedorPaseadores");
+  contenedor.innerHTML = "";
+
+  const valorFiltro = document.getElementById("filtroTamanio").value;
+
+  let paseadoresFiltrados = [];
+
+  if (valorFiltro === "todos") {
+    paseadoresFiltrados = sistema.paseadores;
+  } else {
+    paseadoresFiltrados = sistema.paseadores.filter(p => p.tamanioPerro === valorFiltro);
+  }
+
+  for (const p of paseadoresFiltrados) {
+    contenedor.innerHTML += `
+      <div class="card-paseador">
+        <h3>${p.nombreCompleto}</h3>
+        <p><strong>Usuario:</strong> ${p.nombreUsuario}</p>
+        <p><strong>Tamaño:</strong> ${p.tamanioPerro}</p>
+        <p><strong>Descripción:</strong> ${p.descripcion}</p>
+        <p><strong>Estrellas:</strong> ${"⭐".repeat(p.estrellas)}</p>
+      </div>
+    `;
+  }
+
+  if (paseadoresFiltrados.length === 0) {
+    contenedor.innerHTML = "<p>No hay paseadores para ese tamaño.</p>";
+  }
 }
 
 /////////////////////////////////////////////////////////
@@ -275,8 +260,16 @@ function cerrarSesionUI() {
   sistema.usuarioLogueado = null;
   ocultarTodo();
   prepararLogin();
-}
 
+  // Limpiar la vista de reserva para evitar mostrar info vieja
+  let pInfo = document.getElementById("infoReservaCliente");
+  let btnCancelar = document.getElementById("btnCancelarReserva");
+  if (pInfo) pInfo.textContent = "";
+  if (btnCancelar) btnCancelar.style.display = "none";
+
+    // Ocultar la sección "Mi reserva"
+  ocultarElemento("divMiReservaCliente");
+}
 
 /////////////////////////////////////////////////////////
 // FUNCIONES AUXILIARES
@@ -317,9 +310,8 @@ function contraseniaValida(pass) {
 }
 
 /////////////////////////////////////////////////////////
-// CLIENTE
+// FUNCIONES DE CONTRATACIÓN Y RESERVAS
 /////////////////////////////////////////////////////////
-
 function cargarPaseadoresDisponiblesUI() {
   let cliente = sistema.usuarioLogueado;
   if (!cliente) return;
@@ -375,13 +367,17 @@ function contratarPaseadorUI() {
 
 function mostrarReservaClienteUI() {
   let lista = sistema.obtenerContratacionesCliente(sistema.usuarioLogueado);
-  let div   = document.getElementById("divCancelarReserva");
+  let div = document.getElementById("divMiReservaCliente");
   if (!div) return;
 
+  let pInfo = document.getElementById("infoReservaCliente");
+  let btnCancelar = document.getElementById("btnCancelarReserva");
+
   if (lista.length === 0) {
-    div.querySelector("#pInfoReserva").textContent = "No posee contrataciones.";
+    pInfo.textContent = "No posee contrataciones.";
+    btnCancelar.style.display = "none";
   } else {
-    div.querySelector("#pInfoReserva").innerHTML =
+    pInfo.innerHTML =
       `<table>
         <thead><tr><th>Paseador</th><th>Estado</th></tr></thead>
         <tbody>
@@ -390,13 +386,16 @@ function mostrarReservaClienteUI() {
           ).join("")}
         </tbody>
       </table>`;
+
+    // Mostrar botón cancelar solo si hay alguna reserva pendiente
+    const tienePendiente = lista.some(c => c.estado === "Pendiente");
+    btnCancelar.style.display = tienePendiente ? "inline-block" : "none";
   }
 }
 
 /////////////////////////////////////////////////////////
-// PASEADOR
+// FUNCIONES PASEADOR
 /////////////////////////////////////////////////////////
-
 function mostrarSolicitudesPaseadorUI() {
   const pas = sistema.usuarioLogueado;
   if (!pas) return;

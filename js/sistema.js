@@ -101,6 +101,10 @@ class Sistema {
     return false;
   }
 
+  obtenerPaseadores() {
+  return this.paseadores;
+  }
+
   ///////////////////////////////////////////////////////
   // CONTRATACIONES
   ///////////////////////////////////////////////////////
@@ -111,11 +115,11 @@ class Sistema {
     const estados = ["Pendiente", "Aprobada", "Rechazada"];
 
     for (let i = 0; i < 10; i++) {
-      const cliente = this.clientes[i % this.clientes.length]; 
-      const paseador = this.paseadores[i % this.paseadores.length]; 
-      const estado = estados[i % estados.length]; 
+      let cliente = this.clientes[i % this.clientes.length]; 
+      let paseador = this.paseadores[i % this.paseadores.length]; 
+      let estado = estados[i % estados.length]; 
 
-      const contratacion = new Contratacion(cliente, paseador);
+      let contratacion = new Contratacion(cliente, paseador);
       contratacion.estado = estado;
 
       if (estado === "Aprobada") {
